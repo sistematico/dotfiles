@@ -6,7 +6,7 @@ máquinas.
 
 Este repositório é hospedado em dois lugares ao mesmo tempo:
 
-- **Fonte principal:** [git.paxa.dev](https://git.paxa.dev/lucas/dotfiles) — servidor Git próprio (repositórios bare)
+- **Fonte principal:** [git.paxa.dev](https://git.paxa.dev/lucas/Dotfiles) — servidor Git próprio (repositórios bare)
 - **Espelho:** [GitHub](https://github.com/sistematico/dotfiles)
 
 ## Configurando o push duplo
@@ -17,10 +17,10 @@ que é a fonte de verdade; o GitHub funciona como espelho.
 
 ```sh
 # 1. Crie o remote apontando para o servidor próprio (URL usada para fetch)
-git remote add origin git@git.paxa.dev:lucas/dotfiles.git
+git remote add origin git@git.paxa.dev:lucas/Dotfiles.git
 
 # 2. Adicione as duas URLs de push
-git remote set-url --add --push origin git@git.paxa.dev:lucas/dotfiles.git
+git remote set-url --add --push origin git@git.paxa.dev:lucas/Dotfiles.git
 git remote set-url --add --push origin git@github.com:sistematico/dotfiles.git
 ```
 
@@ -32,8 +32,8 @@ Verifique a configuração:
 
 ```sh
 git remote -v
-# origin  git@git.paxa.dev:lucas/dotfiles.git (fetch)
-# origin  git@git.paxa.dev:lucas/dotfiles.git (push)
+# origin  git@git.paxa.dev:lucas/Dotfiles.git (fetch)
+# origin  git@git.paxa.dev:lucas/Dotfiles.git (push)
 # origin  git@github.com:sistematico/dotfiles.git (push)
 ```
 
@@ -44,7 +44,7 @@ git remote -v
 Se o repositório bare ainda não existir no servidor:
 
 ```sh
-ssh git@git.paxa.dev "mkdir -p lucas && git init --bare lucas/dotfiles.git"
+ssh git@git.paxa.dev "mkdir -p lucas && git init --bare lucas/Dotfiles.git"
 ```
 
 Convém ter um host configurado no `~/.ssh/config`:
