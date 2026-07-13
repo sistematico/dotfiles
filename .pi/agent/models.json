@@ -1,0 +1,13 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:1234/v1",
+      "api": "openai-completions",
+      "apiKey": "key",
+      "models": [
+        { "id": "google/gemma-4-12b" },
+        { "id": "qwen2.5-coder:7b" }
+      ]
+    }
+  }
+}
