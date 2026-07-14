@@ -1,0 +1,16 @@
+address "irc.somdomato.com:6698"
+nickname "lucas"
+username "lucas"
+realname "Lucas Saliés Brum"
+password-cmd pass irc/sdm 
+channel "#somdomato"
+
+pane-widths {
+	nicknames 10
+	channels 16
+	members 16
+}
+
+colors {
+	nicks extended
+}

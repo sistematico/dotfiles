@@ -1,0 +1,288 @@
+{
+  "layer": "top",
+  "position": "top",
+  "mod": "dock",
+  "height": 38,
+  "margin-left": 10,
+  "margin-right": 10,
+  "margin-top": 10,
+  "margin-bottom": 10,
+  "exclusive": true,
+  "passthrough": false,
+  "gtk-layer-shell": true,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "mango/workspaces",
+    "custom/applauncher",
+    "custom/video-down"
+  ],
+  "modules-center": [
+    "mango/window"
+  ],
+  "modules-right": [
+    "custom/cliphist",
+    "idle_inhibitor",
+    "cpu",
+    "memory",
+    "disk",
+    "temperature",
+    "wireplumber#sink",
+    "tray",
+    "clock",
+    "custom/wlogout"
+  ],
+  "mango/workspaces": {
+    "format": "{icon}",
+    "hide-empty": true,
+    "on-click": "activate",
+    "on-click-right": "toggle",
+    "format-icons": {
+      // "default": "", // old nerd-font icon
+      "default": "○",
+      // "active": "", // old nerd-font icon
+      "active": "●"
+    }
+  },
+  // 
+  "custom/applauncher": {
+    "format": "",
+    "on-click": "rofi -show drun"
+  },
+  "custom/video-down": {
+    "exec": "~/.config/waybar/scripts/downloads.sh",
+    "return-type": "json",
+    "format": "{}",
+    "interval": 2,
+    "on-click": "~/.local/bin/video-down.sh"
+  },
+  "mango/window": {
+    "format": "{}",
+    "icon-size": 20
+  },
+  "custom/cliphist": {
+    "format": "{}",
+    "rotate": 0,
+    // "exec": "echo ; echo 󰅇 clipboard history",
+    "on-click": "~/.local/bin/clip-history.sh menu",
+    "on-click-right": "~/.local/bin/clip-history.sh clear"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "rotate": 0,
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "cpu": {
+    "interval": 1,
+    "format": " {icon}",
+    // "rotate": 270,
+    "format-icons": [
+      "󰝦",
+      "󰪞",
+      "󰪟",
+      "󰪠",
+      "󰪡",
+      "󰪢",
+      "󰪣",
+      "󰪤",
+      "󰪥"
+    ]
+  },
+  "memory": {
+    "interval": 1,
+    "rotate": 0,
+    "format": " {icon}",
+    "format-icons": [
+      "󰝦",
+      "󰪞",
+      "󰪟",
+      "󰪠",
+      "󰪡",
+      "󰪢",
+      "󰪣",
+      "󰪤",
+      "󰪥"
+    ],
+    "max-length": 10
+  },
+  "disk": {
+	  "interval": 30,
+	  "format": " {percentage_used}%",
+  },
+//  "disk": {
+//    "interval": 30,
+//    "format": "{path} {percentage_free}%",
+//    "header": " ",
+//    "paths": [
+//      "/",
+//      "/home"
+//    ],
+//    "separator": " "
+//  },
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon8/temp1_input",
+    // "critical-threshold": 80,
+    // "format-critical": "{temperatureC}°C ",
+    "format": " {temperatureC}°C"
+  },
+  "tray": {
+    "icon-size": 16,
+    "rotate": 0,
+    "spacing": 3
+  },
+  "wireplumber#sink": {
+    "format": "<span></span> {volume}%",
+    "format-muted": "",
+    // "format-icons": ["", "", ""],
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-middle": "pavucontrol",
+    "scroll-step": 5
+  },
+  "wireplumber#source": {
+    "node-type": "Audio/Source",
+    "format": " {volume}%",
+    "format-muted": "",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "scroll-step": 5
+  },
+  "network": {
+    "tooltip": true,
+    "format-wifi": "{icon} ",
+    "format-icons": [
+      "󰤟",
+      "󰤢",
+      "󰤥"
+    ],
+    //  "format-wifi": "<i class='fa-solid fa-wifi-slash'></i>",
+    "rotate": 0,
+    "format-ethernet": "󰈀 ",
+    "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>",
+    "format-linked": "󰈀 {ifname} (No IP)",
+    "format-disconnected": " ",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "/usr/local/bin/ags -t ControlPanel",
+    "interval": 2
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "rotate": 0,
+    "format-muted": "婢",
+    "tooltip-format": "{icon} {desc} // {volume}%",
+    "scroll-step": 5,
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    }
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "rotate": 0,
+    "format-source": "",
+    "format-source-muted": "",
+    "on-click": "pavucontrol -t 4",
+    "on-click-middle": "volumecontrol.sh -i m",
+    "on-scroll-up": "volumecontrol.sh -i i",
+    "on-scroll-down": "volumecontrol.sh -i d",
+    "tooltip-format": "{format_source} {source_desc} // {source_volume}%",
+    "scroll-step": 5
+  },
+  "pulseaudio/slider": {
+    "min": 5,
+    "max": 100,
+    "rotate": 0,
+    "device": "pulseaudio",
+    "scroll-step": 1
+  },
+  "clock": {
+    "format": "<span></span> {:%I:%M %p}",
+    "rotate": 0,
+    "on-click": "/usr/local/bin/ags -t ActivityCenter",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b>{}</b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+  "custom/wlogout": {
+    "format": "",
+    "tooltip": false,
+    "on-click": "wlogout -b 6"
+  },
+  "group/power": {
+    "orientation": "horizontal",
+    "click-to-reveal": true,
+    "start-expanded": false,
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "power-children",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/powermenu",
+      "custom/shutdown",
+      "custom/reboot",
+      "custom/suspend",
+      "custom/lock",
+      "custom/quit"
+    ]
+  },
+  "custom/powermenu": {
+    "format": "",
+    "tooltip": false
+    // "on-click": "poweroff"
+  },
+  "custom/shutdown": {
+    "format": "",
+    "tooltip-format": "Desligar",
+    "on-click": "poweroff"
+  },
+  "custom/reboot": {
+    "format": "",
+    "tooltip-format": "Reiniciar",
+    "on-click": "reboot"
+  },
+  "custom/suspend": {
+    "format": "",
+    "tooltip-format": "Suspender",
+    "on-click": "systemctl suspend"
+  },
+  "custom/lock": {
+    "format": "",
+    "tooltip-format": "Bloquear",
+    "on-click": "swaylock"
+  },
+  "custom/quit": {
+    "format": "",
+    "tooltip-format": "Sair",
+    "on-click": "mmsg dispatch quit"
+  }
+  // close 
+  // 
+  // more vert 
+  // more horiz 
+}

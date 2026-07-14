@@ -1,0 +1,57 @@
+window {
+    font-family: CaskaydiaCove Nerd Font, monospace;
+    color: #f4dfcd; 
+    background-color: rgba(46, 42, 30, 0.9);
+}
+
+button {
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 60px;
+    font-weight: bold;
+    background-size: 70%;
+    border: none;
+    color: #d5b497;
+    text-shadow: none;
+    border-radius: 20px 20px 20px 20px;
+    background-color: rgba(121, 81, 1, 0);
+    margin-top: 200px;
+    margin-bottom: 200px;
+    transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682), box-shadow 0.5s ease-in;
+}
+
+button:hover {
+    /* background-color: rgba(184, 149, 80, 0.3); */
+    background-size: 80%;
+    transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682), box-shadow 0.5s ease-in;
+}
+
+#lock {
+  opacity: 0;
+    background-image: image(url("./icons/lock.png"));
+}
+
+#logout {
+    background-image: image(url("./icons/logout.png"));
+}
+
+#logout:hover {
+    background-image: image(url("./icons/logout.png"));
+}
+
+#suspend {
+    background-image: image(url("./icons/sleep.png"));
+} 
+
+#shutdown {
+    background-image: image(url("./icons/power.png"));
+}
+
+#reboot {
+    background-image: image(url("./icons/restart.png"));
+}
+
+#hibernate {
+  opacity: 0;
+  /* background-image: image(url("./icons/hibernate.png")); */
+}
