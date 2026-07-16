@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+
+project="$HOME/.local/share/rofi-app-toggle-ratatui"
+binary="$project/target/release/rofi-app-toggle-ratatui"
+source_file="$project/src/main.rs"
+
+if [ ! -x "$binary" ] || [ "$source_file" -nt "$binary" ] || [ "$project/Cargo.toml" -nt "$binary" ]; then
+  cargo build --release --manifest-path "$project/Cargo.toml"
+fi
+
+exec "$binary" "$@"

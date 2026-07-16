@@ -1,0 +1,124 @@
+/* Tokyo Night theme for rofi */
+
+* {
+    bg:         #1a1b26;
+    bg-alt:     #16161e;
+    bg-select:  #33467c;
+    fg:         #c0caf5;
+    fg-alt:     #565f89;
+    blue:       #7aa2f7;
+    magenta:    #bb9af7;
+    cyan:       #7dcfff;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font: "UbuntuMono Nerd Font Mono 14";
+}
+
+window {
+    background-color: @bg;
+    border:           2px;
+    border-color:     @blue;
+    border-radius:    8px;
+    width:            600px;
+    padding:          0;
+}
+
+mainbox {
+    padding: 12px;
+    spacing: 8px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius:    6px;
+    padding:          8px 12px;
+    spacing:          8px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @blue;
+}
+
+entry {
+    placeholder:       "Pesquisar...";
+    placeholder-color: @fg-alt;
+}
+
+listview {
+    lines:   8;
+    spacing: 2px;
+    scrollbar: false;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 6px;
+    spacing:       8px;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @bg-select;
+    text-color:       @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color: @cyan;
+}
+
+element selected.active {
+    background-color: @bg-select;
+    text-color:       @cyan;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: #f7768e;
+}
+
+element selected.urgent {
+    background-color: #f7768e;
+    text-color:       @bg;
+}
+
+element-icon {
+    size: 1.2em;
+}
+
+element-text {
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+
+message {
+    background-color: @bg-alt;
+    border-radius:    6px;
+    padding:          8px;
+}
+
+textbox {
+    text-color: @fg-alt;
+}
+
+mode-switcher {
+    spacing: 4px;
+}
+
+button {
+    padding:       6px;
+    border-radius: 6px;
+    text-color:    @fg-alt;
+}
+
+button selected {
+    background-color: @bg-select;
+    text-color:       @fg;
+}

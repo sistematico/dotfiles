@@ -1,6 +1,22 @@
-# Options
+#################################################
+################### Options #####################
+#################################################
+setopt SHARE_HISTORY        # compartilha histórico entre terminais abertos
+setopt HIST_IGNORE_ALL_DUPS # não guarda comandos duplicados
 setopt autocd
 
+# Histórico
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# Alt+Backspace apaga só o último segmento do caminho, como no bash
+autoload -Uz select-word-style
+select-word-style bash
+
+#################################################
+################### Keybindings ################
+#################################################
 # Keybindings
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -48,10 +64,6 @@ bindkey -- "\e[F" end-of-line
 bindkey "\e[1;5C" forward-word
 bindkey "\e[1;5D" backward-word
 
-# Alt+Backspace apaga só o último segmento do caminho, como no bash
-autoload -Uz select-word-style
-select-word-style bash
-
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
@@ -62,13 +74,9 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget zle-line-finish zle_application_mode_stop
 fi
 
-# Histórico
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-setopt SHARE_HISTORY        # compartilha histórico entre terminais abertos
-setopt HIST_IGNORE_ALL_DUPS # não guarda comandos duplicados
-
+#################################################
+################### Aliases #####################
+#################################################
 # Extension aliases
 alias -s {md,mdx}=leaf
 
@@ -80,24 +88,95 @@ alias rehash="source $HOME/.zshrc"
 alias pacman='sudo pacman --noconfirm'
 alias clean-pacman='pacman -Qdttq | pacman -Rs - 2> /dev/null'
 alias paru='paru --noconfirm'
-#alias ls='eza --color=always --group-directories-first' 
 alias ls='ls --color=always --group-directories-first' 
 alias mkdir='mkdir -p'
-alias hconf="nvim ~/.config/hypr/hyprland.conf"
+alias mconf="nvim ~/.config/mango/config.conf"
 alias nconf="nvim ~/.config/nvim/"
 alias wconf="nvim -p ~/.config/waybar/config.jsonc ~/.config/waybar/style.css"
-alias kconf="nvim ~/.config/kitty/kitty.conf"
-alias rconf="nvim ~/.config/kitty/kitty.conf"
-alias duconf="nvim ~/.config/dunst/dunstrc"
+alias fconf="nvim ~/.config/foot/foot.ini"
+alias mkconf="nvim ~/.config/mako/config"
 alias copiar='wl-copy <'
 alias mkcert="certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/cloudflare.ini"
 alias host='getent hosts'
 alias update-ollama='curl https://ollama.ai/install.sh | sh'
 alias install-webui='docker run -d -p 4000:8080 -e WEBUI_AUTH=False --gpus all --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda'
-alias hyprsettings='hyprsettings --no-dmabuf'
 alias script='TERM=dumb script'
 
-# Prompt
+#################################################
+################### Functions ###################
+#################################################
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
+}
+
+# git
+function commit() {
+  icon=":robot_face:"
+  upstream="$(git config --get remote.origin.url)"
+  test "${string#*"github"}" != "$upstream" && icon="🤖"
+
+  #[ -f .commit ] && msg="$(cat .commit)" || msg="Commit automático"
+  [ -f .commit ] && msg="$icon $(cat .commit)" || msg="$icon Alterações: $(git status -s -z)"
+  [ $1 ] && msg="$@"
+  git add .
+  git commit -m "$msg"
+  git push
+}
+
+# fonts
+function list-fonts() {
+  [ ! $1 ] && return
+  fc-list | awk -F':' '{print $2}' | grep -i $1 | awk '{$1=$1};1' | sort | uniq
+}
+
+# ssh
+function fullsync() {
+  [ ! -d $STORAGE/vps/$1 ] && mkdir -p $STORAGE/vps/${1}
+  local machine="$1"
+  shift
+
+  rsync -aAXvzz \
+    --exclude-from "$HOME/.config/rsync-excludes.list" \
+    root@${machine}:/ $STORAGE/vps/${machine}/ \
+    "$@"
+}
+
+# Cleanup
+# bun
+function clean-bun() {
+  bun pm cache rm
+  rm -rf ~/.bun/install/cache
+}
+
+# npm
+function clean-npm() {
+  npm cache clean --force
+}
+
+# pnpm
+function clean-pnpm() {
+  pnpm store prune
+  # Example (replace the path with your actual store path):
+  #rm -rf $(pnpm store path)
+}
+
+# docker
+function clean-docker() {
+  docker system prune -a
+}
+
+# podman
+function clean-podman() {
+  podman system prune -a
+}
+
+#################################################
+################### Prompt ######################
+#################################################
 autoload -Uz vcs_info
 precmd() { 
     vcs_info
@@ -152,28 +231,9 @@ setopt PROMPT_SUBST
 # Prompt principal (uma linha)
 PROMPT='%F{cyan}%n%f in %F{yellow}%~%f${vcs_info_msg_0_}$(git_stash_count)$(git_push_status) %(?.%F{green}.%F{red})❯%f '
 
-
-# Added by Antigravity CLI installer
-export PATH="/home/lucas/.local/bin:$PATH"
-
 # bun completions
 [ -s "/home/lucas/.bun/_bun" ] && source "/home/lucas/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/home/lucas/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
-
 source /usr/share/doc/pkgfile/command-not-found.zsh
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/lucas/.lmstudio/bin"
-# End of LM Studio CLI section
-
+# kimi-code
+export PATH="/home/lucas/.kimi-code/bin:$PATH"

@@ -1,0 +1,226 @@
+/* Tokyo Night
+   bg #1a1b26 | bg-dark #16161e | surface #24283b | highlight #292e42 | border #3b4261
+   fg #c0caf5 | fg-dim #a9b1d6 | comment #565f89
+   blue #7aa2f7 | cyan #7dcfff | teal #73daca | green #9ece6a
+   yellow #e0af68 | orange #ff9e64 | red #f7768e | magenta #bb9af7 */
+
+window.SysMenu {
+  background: transparent;
+}
+
+window.HotZone {
+  /* alfa mínimo: 100% transparente faz o compositor ignorar o mouse */
+  background: rgba(0, 0, 0, 0.01);
+}
+
+window.SysMenu .menu {
+  min-width: 380px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #3b4261;
+  background: linear-gradient(160deg, rgba(26, 27, 38, 0.97), rgba(22, 22, 30, 0.97));
+  color: #c0caf5;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Noto Sans", sans-serif;
+  font-size: 13px;
+}
+
+window.SysMenu .header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3b4261;
+}
+
+window.SysMenu .header .title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #7aa2f7;
+}
+
+window.SysMenu .header .uptime {
+  color: #565f89;
+  font-size: 12px;
+}
+
+window.SysMenu .icon-tile {
+  padding: 6px;
+  border-radius: 10px;
+  background: #292e42;
+  border: 1px solid rgba(59, 66, 97, 0.6);
+}
+
+window.SysMenu .stat-row {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(36, 40, 59, 0.55);
+  border: 1px solid rgba(59, 66, 97, 0.35);
+}
+
+window.SysMenu .stat-title {
+  font-weight: 600;
+  color: #a9b1d6;
+}
+
+window.SysMenu .stat-value {
+  font-weight: 700;
+  color: #7dcfff;
+  font-size: 12px;
+}
+
+window.SysMenu .stat-bar {
+  margin-top: 8px;
+}
+
+window.SysMenu .stat-bar trough {
+  min-height: 8px;
+  border-radius: 8px;
+  background: #16161e;
+  border: none;
+}
+
+window.SysMenu .stat-bar block.filled {
+  min-height: 8px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #7aa2f7, #7dcfff);
+}
+
+window.SysMenu .stat-bar block.empty {
+  background: transparent;
+  border: none;
+}
+
+window.SysMenu .stat-row.warn .stat-value {
+  color: #e0af68;
+}
+
+window.SysMenu .stat-row.warn .stat-bar block.filled {
+  background: linear-gradient(90deg, #e0af68, #ff9e64);
+}
+
+window.SysMenu .stat-row.crit .stat-value {
+  color: #f7768e;
+}
+
+window.SysMenu .stat-row.crit .stat-bar block.filled {
+  background: linear-gradient(90deg, #ff9e64, #f7768e);
+}
+
+window.SysMenu .procs {
+  padding: 8px 10px 10px 10px;
+  border-radius: 12px;
+  background: rgba(36, 40, 59, 0.55);
+  border: 1px solid rgba(59, 66, 97, 0.35);
+}
+
+window.SysMenu .procs-header {
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(59, 66, 97, 0.5);
+}
+
+window.SysMenu .proc-col {
+  color: #565f89;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 52px;
+}
+
+window.SysMenu .proc-row {
+  padding: 3px 2px;
+  border-radius: 6px;
+}
+
+window.SysMenu .proc-row:hover {
+  background: #292e42;
+}
+
+window.SysMenu .proc-name {
+  color: #c0caf5;
+  font-size: 12px;
+}
+
+window.SysMenu .proc-cpu {
+  color: #bb9af7;
+  font-weight: 600;
+  font-size: 12px;
+  min-width: 52px;
+}
+
+window.SysMenu .proc-mem {
+  color: #73daca;
+  font-weight: 600;
+  font-size: 12px;
+  min-width: 52px;
+}
+
+/* ---- Menu de energia ---- */
+
+window.PowerMenu {
+  background: transparent;
+}
+
+window.PowerMenu .menu {
+  min-width: 210px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid #3b4261;
+  background: linear-gradient(160deg, rgba(26, 27, 38, 0.97), rgba(22, 22, 30, 0.97));
+  color: #c0caf5;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Noto Sans", sans-serif;
+  font-size: 13px;
+}
+
+window.PowerMenu .header {
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #3b4261;
+}
+
+window.PowerMenu .header .title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f7768e;
+}
+
+window.PowerMenu .icon-tile {
+  padding: 5px;
+  border-radius: 10px;
+  background: #292e42;
+  border: 1px solid rgba(59, 66, 97, 0.6);
+}
+
+window.PowerMenu .power-btn {
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-weight: 600;
+  color: #a9b1d6;
+}
+
+window.PowerMenu .power-btn:hover {
+  border: 1px solid rgba(59, 66, 97, 0.6);
+  color: #c0caf5;
+}
+
+window.PowerMenu .power-btn.shutdown:hover {
+  background: rgba(247, 118, 142, 0.15);
+  color: #f7768e;
+}
+
+window.PowerMenu .power-btn.reboot:hover {
+  background: rgba(255, 158, 100, 0.15);
+  color: #ff9e64;
+}
+
+window.PowerMenu .power-btn.suspend:hover {
+  background: rgba(224, 175, 104, 0.15);
+  color: #e0af68;
+}
+
+window.PowerMenu .power-btn.lock:hover {
+  background: rgba(122, 162, 247, 0.15);
+  color: #7aa2f7;
+}
+
+window.PowerMenu .power-btn.logout:hover {
+  background: rgba(187, 154, 247, 0.15);
+  color: #bb9af7;
+}

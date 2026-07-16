@@ -4,6 +4,49 @@ Meus arquivos de configuração pessoais (dotfiles) — shell, editor, SSH e
 afins — versionados em Git para facilitar backup e replicação em novas
 máquinas.
 
+## Symlinks
+
+Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para dentro deste repositório, e o que já está "trackeado" aqui. Mantida automaticamente pelo script `dotfile-track.sh` (Thunar Custom Action) sempre que um novo item é movido para cá.
+
+| Origem | Aponta para |
+| --- | --- |
+| `~/.config/mako` | `~/dotfiles/.config/mako` |
+| `~/.config/swaylock` | `~/dotfiles/.config/swaylock` |
+| `~/.config/rofi` | `~/dotfiles/.config/rofi` |
+| `~/.local/share/ags-sysmenu` | `~/dotfiles/.local/share/ags-sysmenu` |
+| `~/.config/Thunar/uca.xml` | `~/dotfiles/.config/Thunar/uca.xml` |
+| `~/bin/rofi-app-toggle` | `~/dotfiles/bin/rofi-app-toggle` |
+| `~/bin/luks.sh` | `~/dotfiles/bin/luks.sh` |
+| `~/.config/foot/foot.ini` | `~/dotfiles/.config/foot/foot.ini` |
+| `~/.config/gtk-3.0/settings.ini` | `~/dotfiles/.config/gtk-3.0/settings.ini` |
+| `~/.config/gtk-4.0/settings.ini` | `~/dotfiles/.config/gtk-4.0/settings.ini` |
+| `~/.config/mango` | `~/dotfiles/.config/mango` |
+| `~/.config/mpd/mpd.conf` | `~/dotfiles/.config/mpd/mpd.conf` |
+| `~/.config/mpv/input.conf` | `~/dotfiles/.config/mpv/input.conf` |
+| `~/.config/mpv/mpv.conf` | `~/dotfiles/.config/mpv/mpv.conf` |
+| `~/.config/ncmpcpp/bindings` | `~/dotfiles/.config/ncmpcpp/bindings` |
+| `~/.config/ncmpcpp/config` | `~/dotfiles/.config/ncmpcpp/config` |
+| `~/.config/nvim/init.lua` | `~/dotfiles/.config/nvim/init.lua` |
+| `~/.config/nvim/lua` | `~/dotfiles/.config/nvim/lua` |
+| `~/.config/senpai/senpai.scfg` | `~/dotfiles/.config/senpai/senpai.scfg` |
+| `~/.config/waybar` | `~/dotfiles/.config/waybar` |
+| `~/.config/wlogout` | `~/dotfiles/.config/wlogout` |
+| `~/.local/bin/aicommit.sh` | `~/dotfiles/.local/bin/aicommit.sh` |
+| `~/.local/bin/dotfile-track.sh` | `~/dotfiles/.local/bin/dotfile-track.sh` |
+| `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
+| `~/.local/bin/screenshot-area.sh` | `~/dotfiles/.local/bin/screenshot-area.sh` |
+| `~/.local/bin/screenshot-full.sh` | `~/dotfiles/.local/bin/screenshot-full.sh` |
+| `~/.local/bin/video-down.sh` | `~/dotfiles/.local/bin/video-down.sh` |
+| `~/.local/bin/video-shrink.sh` | `~/dotfiles/.local/bin/video-shrink.sh` |
+| `~/.local/bin/ytmusic.sh` | `~/dotfiles/.local/bin/ytmusic.sh` |
+| `~/.npmrc` | `~/dotfiles/.npmrc` |
+| `~/.pi/agent/models.json` | `~/dotfiles/.pi/agent/models.json` |
+| `~/.ssh/config` | `~/dotfiles/.ssh/config` |
+| `~/.tmux.conf` | `~/dotfiles/.tmux.conf` |
+| `~/.vimrc` | `~/dotfiles/.vimrc` |
+| `~/.zprofile` | `~/dotfiles/.zprofile` |
+| `~/.zshrc` | `~/dotfiles/.zshrc` |
+
 Este repositório é hospedado em dois lugares ao mesmo tempo:
 
 - **Fonte principal:** [git.paxa.dev](https://git.paxa.dev/lucas/Dotfiles) — servidor Git próprio (repositórios bare)

@@ -5,7 +5,9 @@
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
+        { "id": "liquid/lfm2-24b-a2b" },
         { "id": "google/gemma-4-12b" },
+        { "id": "google/gemma-4-e4b" },
         { "id": "qwen2.5-coder:7b" }
       ]
     }

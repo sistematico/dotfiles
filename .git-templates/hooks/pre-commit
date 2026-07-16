@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+export PATH=$PATH:/home/lucas/.local/share/pnpm/bin
+
+[ ! -f pnpm-lock.yaml ] && exit 0
+
+echo "🎨 Formatando código antes do push..."
+pnpm run format
+
+if [ $? -ne 0 ]; then
+  echo "❌ Erro ao formatar código. Push cancelado."
+  exit 1
+fi
+echo "✅ Código formatado com sucesso!"                                                             
+
+echo "🎨 Checando o código antes do push..." 
+pnpm exec tsc --noEmit
+
+if [ $? -ne 0 ]; then
+  echo "❌ Erro ao checar o código. Push cancelado."
+  exit 1
+fi    
+
+echo "✅ Código compilado com sucesso!"
+
+exit 0
+

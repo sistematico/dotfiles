@@ -1,0 +1,11 @@
+configuration {
+    modes: "drun,run,window";
+    show-icons: true;
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Janelas";
+    /* me-select-entry: "MousePrimary"; */
+    me-accept-entry: "!MousePrimary";
+}
+
+@theme "~/.config/rofi/tokyonight.rasi"

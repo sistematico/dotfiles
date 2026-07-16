@@ -6,7 +6,7 @@
   "margin-left": 10,
   "margin-right": 10,
   "margin-top": 10,
-  "margin-bottom": 10,
+  "margin-bottom": 0,
   "exclusive": true,
   "passthrough": false,
   "gtk-layer-shell": true,
@@ -23,9 +23,9 @@
     "custom/cliphist",
     "idle_inhibitor",
     "cpu",
-    "memory",
-    "disk",
-    "temperature",
+    // "memory",
+    // "disk",
+    // "temperature",
     "wireplumber#sink",
     "tray",
     "clock",
@@ -56,8 +56,15 @@
     "on-click": "~/.local/bin/video-down.sh"
   },
   "mango/window": {
-    "format": "{}",
-    "icon-size": 20
+    //"format": "{}",
+    //"icon-size": 20
+    "format": "{title}",
+    "rewrite": {
+      "(.*) - Mozilla Firefox": "🌎 $1",
+      "(.*) - zsh": "> [$1]"
+    },
+    "icon": true,
+    "icon-size": 22
   },
   "custom/cliphist": {
     "format": "{}",
@@ -75,21 +82,26 @@
     }
   },
   "cpu": {
-    "interval": 1,
-    "format": " {icon}",
-    // "rotate": 270,
-    "format-icons": [
-      "󰝦",
-      "󰪞",
-      "󰪟",
-      "󰪠",
-      "󰪡",
-      "󰪢",
-      "󰪣",
-      "󰪤",
-      "󰪥"
-    ]
+    "interval": 10,
+    "format": " {}%",
+    "max-length": 10
   },
+  // "cpu": {
+  //   "interval": 1,
+  //   "format": " {icon}",
+  //   // "rotate": 270,
+  //   "format-icons": [
+  //     "󰝦",
+  //     "󰪞",
+  //     "󰪟",
+  //     "󰪠",
+  //     "󰪡",
+  //     "󰪢",
+  //     "󰪣",
+  //     "󰪤",
+  //     "󰪥"
+  //   ]
+  // },
   "memory": {
     "interval": 1,
     "rotate": 0,
@@ -108,19 +120,19 @@
     "max-length": 10
   },
   "disk": {
-	  "interval": 30,
-	  "format": " {percentage_used}%",
+    "interval": 30,
+    "format": " {percentage_used}%",
   },
-//  "disk": {
-//    "interval": 30,
-//    "format": "{path} {percentage_free}%",
-//    "header": " ",
-//    "paths": [
-//      "/",
-//      "/home"
-//    ],
-//    "separator": " "
-//  },
+  //  "disk": {
+  //    "interval": 30,
+  //    "format": "{path} {percentage_free}%",
+  //    "header": " ",
+  //    "paths": [
+  //      "/",
+  //      "/home"
+  //    ],
+  //    "separator": " "
+  //  },
   "temperature": {
     "hwmon-path": "/sys/class/hwmon/hwmon8/temp1_input",
     // "critical-threshold": 80,

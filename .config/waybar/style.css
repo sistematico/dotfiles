@@ -215,7 +215,7 @@ menu menuitem:hover {
   color: @red;
 }
 
-#custom-power, #custom-wlogout {
+#power, #custom-power, #custom-wlogout {
   color: @red;
 }
 
@@ -238,29 +238,12 @@ menu menuitem:hover {
 }
 
 /* Custom buttons */
-#power {
-  color: @red;
-}
-
 #custom-power:hover {
   color: #ffffff;
 }
 
 #custom-cliphist {
   color: @blue;
-}
-
-/* Spacers & Ends */
-#custom-spacer,
-#custom-smallspacer,
-#custom-l_end,
-#custom-r_end,
-#custom-sl_end,
-#custom-sr_end,
-#custom-rl_end,
-#custom-rr_end {
-  background: transparent;
-  color: transparent;
 }
 
 @keyframes blink {

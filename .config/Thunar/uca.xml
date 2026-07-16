@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>1783816654147248-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>folder-symbolic-link</icon>
+	<name>Mover para ~/dotfiles e criar symlink</name>
+	<submenu></submenu>
+	<unique-id>1783816654147248-2</unique-id>
+	<command>dotfile-track.sh %F</command>
+	<description>Move o arquivo/pasta selecionado para ~/dotfiles (preservando a estrutura de caminho) e cria um symlink no lugar original, atualizando a tabela em ~/dotfiles/README.md</description>
+	<range></range>
+	<patterns>*</patterns>
+	<image-files/>
+	<video-files/>
+	<audio-files/>
+	<other-files/>
+	<text-files/>
+	<directories/>
+</action>
+</actions>
