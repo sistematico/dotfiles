@@ -8,7 +8,7 @@ gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
 
 # Configurações de tema e ícones
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Dark-Gruvbox'
 #gsettings set org.gnome.desktop.interface icon-theme 'Newaita-dark'
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 
@@ -31,14 +31,14 @@ gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden false
 
 # Forçar tema escuro via dconf para GTK3 e GTK4
 dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
-dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
+dconf write /org/gnome/desktop/interface/gtk-theme "'Colloid-Dark-Gruvbox'"
 
 # Criar/atualizar arquivo de configuração GTK3
 mkdir -p ~/.config/gtk-3.0
 cat > ~/.config/gtk-3.0/settings.ini << EOF
 [Settings]
 gtk-application-prefer-dark-theme=1
-gtk-theme-name=Adwaita-dark
+gtk-theme-name=Colloid-Dark-Gruvbox
 gtk-icon-theme-name=Newaita
 gtk-cursor-theme-name=Adwaita
 gtk-font-name=Sans 10
@@ -52,7 +52,7 @@ mkdir -p ~/.config/gtk-4.0
 cat > ~/.config/gtk-4.0/settings.ini << EOF
 [Settings]
 gtk-application-prefer-dark-theme=1
-gtk-theme-name=Adwaita-dark
+gtk-theme-name=Colloid-Dark-Gruvbox
 gtk-icon-theme-name=Newaita
 gtk-cursor-theme-name=Adwaita
 gtk-font-name=Sans 10

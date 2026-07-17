@@ -1,0 +1,246 @@
+/* =============================================================================
+ * GRUVBOX DARK MINIMALIST THEME FOR WAYBAR (THICK BAR & ICON-ONLY SCALING)
+ * ============================================================================= */
+
+/* Color Palette definitions (Gruvbox Dark) */
+@define-color bg #282828;
+@define-color bg_dark #1d2021;
+@define-color bg_highlight #3c3836;
+@define-color fg #ebdbb2;
+@define-color fg_dark #d5c4a1;
+@define-color comment #928374;
+@define-color red #fb4934;
+@define-color orange #fe8019;
+@define-color yellow #fabd2f;
+@define-color green #b8bb26;
+@define-color teal #8ec07c;
+@define-color blue #83a598;
+@define-color cyan #8ec07c;
+@define-color purple #d3869b;
+
+* {
+  font-family: "JetBrainsMono NFM", "Feather", sans-serif;
+  font-size: 16px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+window#waybar {
+  background: rgba(40, 40, 40, 0.85);
+  /* External glassmorphism background */
+  color: @fg;
+  border: 3px solid rgba(131, 165, 152, 0.2);
+  /* External border only */
+  border-radius: 8px;
+  min-height: 64px;
+  /* Thickened bar physically, without increasing text font size */
+  padding: 0px 12px;
+}
+
+tooltip {
+  font-family: "Ubuntu Nerd Font", sans-serif;
+  background: rgba(29, 32, 33, 0.95);
+  color: @fg;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid rgba(131, 165, 152, 0.3);
+}
+
+menu {
+  font-family: "Ubuntu Nerd Font", sans-serif;
+  background-color: #32302f;
+  color: #ebdbb2;
+  border: 1px solid #504945;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+menu menuitem {
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: #ebdbb2;
+}
+
+menu menuitem:hover {
+  background-color: #3c3836;
+  color: #fbf1c7;
+}
+
+#tray menu * {
+  font-family: "Ubuntu Nerd Font", sans-serif;
+  font-size: 14px;
+  margin: 2px 0;
+  color: @fg;
+}
+
+/* Minimalist Workspaces (No inner background hover or borders) */
+#workspaces {
+  margin: 0px 6px;
+}
+
+#workspaces button {
+  background: transparent;
+  /* No background */
+  box-shadow: none;
+  text-shadow: none;
+  padding: 0px 10px;
+  color: @comment;
+  font-size: 22px;
+  /* Large icons for workspaces */
+  transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces button.active {
+  background: transparent;
+  color: @blue;
+  text-shadow: 0 0 5px rgba(131, 165, 152, 0.4);
+}
+
+#workspaces button:hover {
+  background: transparent;
+  /* Explicitly block any background hover effect */
+  color: @fg;
+}
+
+/* Window Title */
+#window {
+  color: @fg;
+  font-size: 13px;
+  padding: 0px 10px;
+}
+
+/* Generic module styles */
+#wireplumber,
+#pulseaudio,
+#cpu,
+#memory,
+#disk,
+#network,
+#temperature,
+#tray,
+#idle_inhibitor,
+#custom-power,
+#custom-cliphist,
+#custom-pass,
+#custom-wbar,
+#custom-menu,
+#custom-notifications,
+#custom-video-down,
+#custom-applauncher {
+  padding: 0px 8px;
+}
+
+#clock {
+  padding-right: 0px;
+}
+
+#power, #custom-wlogout {
+  padding-right: 12px;
+}
+
+.power-children > * {
+  padding-right: 14px;
+}
+
+/* Color accents for clean identification */
+#wireplumber,
+#pulseaudio {
+  color: @cyan;
+}
+
+#wireplumber.muted,
+#pulseaudio.muted {
+  color: @red;
+}
+
+#clock {
+  color: @purple;
+  margin-right: 8px;
+}
+
+#cpu {
+  color: @purple;
+}
+
+#memory {
+  color: @orange;
+}
+
+#disk {
+  color: @blue;
+}
+
+#network {
+  color: @blue;
+}
+
+#idle_inhibitor {
+  color: @yellow;
+}
+
+#idle_inhibitor.activated {
+  color: @red;
+}
+
+#idle_inhibitor.deactivated {
+  color: @green;
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+#temperature {
+  color: @green;
+}
+
+#temperature.warning {
+  color: @yellow;
+}
+
+#temperature.critical {
+  color: @red;
+}
+
+#power, #custom-power, #custom-wlogout {
+  color: @red;
+}
+
+/* Sliders */
+#pulseaudio-slider trough {
+  min-width: 80px;
+  min-height: 6px;
+  border-radius: 3px;
+  background: @bg_highlight;
+}
+
+#pulseaudio-slider highlight {
+  border-radius: 3px;
+  background-color: @cyan;
+}
+
+#pulseaudio-slider slider {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Custom buttons */
+#custom-power:hover {
+  color: #fbf1c7;
+}
+
+#custom-cliphist {
+  color: @blue;
+}
+
+#custom-pass {
+  color: @red;
+}
+
+@keyframes blink {
+  to {
+    color: @red;
+  }
+}

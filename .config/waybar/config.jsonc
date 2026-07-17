@@ -21,6 +21,7 @@
   ],
   "modules-right": [
     "custom/cliphist",
+    "custom/pass",
     "idle_inhibitor",
     "cpu",
     // "memory",
@@ -72,6 +73,11 @@
     // "exec": "echo ; echo 󰅇 clipboard history",
     "on-click": "~/.local/bin/clip-history.sh menu",
     "on-click-right": "~/.local/bin/clip-history.sh clear"
+  },
+  "custom/pass": {
+    "format": "{}",
+    "rotate": 45,
+    "on-click": "~/.local/bin/rofi-pass.sh",
   },
   "idle_inhibitor": {
     "format": "{icon}",

@@ -20,6 +20,7 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.config/foot/foot.ini` | `~/dotfiles/.config/foot/foot.ini` |
 | `~/.config/gtk-3.0/settings.ini` | `~/dotfiles/.config/gtk-3.0/settings.ini` |
 | `~/.config/gtk-4.0/settings.ini` | `~/dotfiles/.config/gtk-4.0/settings.ini` |
+| `~/.config/kitty` | `~/dotfiles/.config/kitty` |
 | `~/.config/mango` | `~/dotfiles/.config/mango` |
 | `~/.config/mpd/mpd.conf` | `~/dotfiles/.config/mpd/mpd.conf` |
 | `~/.config/mpv/input.conf` | `~/dotfiles/.config/mpv/input.conf` |
@@ -47,6 +48,21 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.vimrc` | `~/dotfiles/.vimrc` |
 | `~/.zprofile` | `~/dotfiles/.zprofile` |
 | `~/.zshrc` | `~/dotfiles/.zshrc` |
+
+## Temas
+
+Tema padrão atual: **Gruvbox Dark**. O tema anterior (**Tokyo Night**) foi
+mantido em paralelo — nada foi apagado, só trocado o que cada app carrega
+por padrão.
+
+| App | Padrão atual | Como trocar |
+| --- | --- | --- |
+| Mango | `.config/mango/themes/gruvbox-dark.conf` | edite o `source=` em `config.conf` pra apontar pro `themes/tokyonight.conf` |
+| Waybar | `.config/waybar/style-gruvbox.css` | edite o `@import` em `style.css` pra `style-tokyonight.css` |
+| Rofi | `.config/rofi/gruvbox-dark.rasi` | edite o `@theme` em `config.rasi` pra `tokyonight.rasi` |
+| GTK 3/4 | tema `Colloid-Dark-Gruvbox` (AUR `colloid-gruvbox-gtk-theme-git`) | troque `gtk-theme-name` em `gtk-3.0/settings.ini` e `gtk-4.0/settings.ini` de volta pra `Adwaita-dark`; refaça os symlinks de `~/.config/gtk-4.0/{assets,gtk.css,gtk-dark.css}` apontando pro `~/.themes/Tokyonight-Dark-Storm/gtk-4.0/` (era o destino original) |
+| Kitty | `.config/kitty/themes/gruvbox-dark.conf` | kitty não tinha config antes; era o primeiro tema criado pra ele |
+| Foot | `.config/foot/themes/gruvbox-dark.ini` | edite o `include=` em `foot.ini` pra apontar pro `themes/tokyonight.ini` |
 
 Este repositório é hospedado em dois lugares ao mesmo tempo:
 
