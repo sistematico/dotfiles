@@ -1,9 +1,20 @@
 #!/bin/bash
 
-MODELS=("google/gemma-4-e4b" "microsoft/phi-4-reasoning-plus" "qwen/qwen3.6-27b" "qwen/qwen3.6-35b-a3b" "google/gemma-4-e4b")
-MODEL="${MODELS[0]}"
+MODELS_JSON="$HOME/.pi/agent/models.json"
 LMS="$HOME/.lmstudio/bin/lms"
 LMSTUDIO_URL="http://localhost:1234/v1"
+
+if [ ! -f "$MODELS_JSON" ]; then
+  echo "Erro: arquivo de modelos não encontrado em $MODELS_JSON"
+  exit 1
+fi
+
+mapfile -t MODELS < <(jq -r '.providers[].models[].id' "$MODELS_JSON")
+if [ "${#MODELS[@]}" -eq 0 ]; then
+  echo "Erro: nenhum modelo encontrado em $MODELS_JSON"
+  exit 1
+fi
+MODEL="${MODELS[0]}"
 
 # Inicia o LM Studio se não estiver acessível
 if ! curl -sf --connect-timeout 2 "$LMSTUDIO_URL/models" >/dev/null 2>&1; then
@@ -65,5 +76,6 @@ if [ -z "$MSG" ]; then
   exit 1
 fi
 
-echo "Commit: $MSG"
+echo "Mensagem de commit: $MSG"
+
 git commit -m "$MSG"

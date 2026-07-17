@@ -33,6 +33,7 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.config/wlogout` | `~/dotfiles/.config/wlogout` |
 | `~/.local/bin/aicommit.sh` | `~/dotfiles/.local/bin/aicommit.sh` |
 | `~/.local/bin/dotfile-track.sh` | `~/dotfiles/.local/bin/dotfile-track.sh` |
+| `~/.local/bin/rofi-pass.sh` | `~/dotfiles/.local/bin/rofi-pass.sh` |
 | `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
 | `~/.local/bin/screenshot-area.sh` | `~/dotfiles/.local/bin/screenshot-area.sh` |
 | `~/.local/bin/screenshot-full.sh` | `~/dotfiles/.local/bin/screenshot-full.sh` |
@@ -217,3 +218,20 @@ alias p='pass -c'
 
 E o pacote `pass-otp` adiciona suporte a códigos TOTP (`pass otp`), útil
 para 2FA.
+
+### Menu no rofi
+
+O script [`rofi-pass.sh`](.local/bin/rofi-pass.sh) lista as entradas do
+cofre num menu do rofi e copia a senha escolhida para a área de
+transferência (via `pass show -c`, que some em 45s), com notificação de
+sucesso/erro via `notify-send`. A primeira opção do menu, "» Gerar nova
+senha", pede o nome da entrada e o tamanho (padrão 20) e chama `pass
+generate -c`, pedindo confirmação antes de sobrescrever uma entrada
+existente.
+
+```sh
+rofi-pass.sh
+```
+
+Para abrir com um atalho de teclado, associe o comando `rofi-pass.sh` no
+seu compositor (sway/hyprland/mango/etc).

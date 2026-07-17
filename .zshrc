@@ -99,6 +99,7 @@ alias copiar='wl-copy <'
 alias mkcert="certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/cloudflare.ini"
 alias host='getent hosts'
 alias update-ollama='curl https://ollama.ai/install.sh | sh'
+alias update-unsloth='curl -fsSL https://unsloth.ai/install.sh | sh'
 alias install-webui='docker run -d -p 4000:8080 -e WEBUI_AUTH=False --gpus all --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda'
 alias script='TERM=dumb script'
 

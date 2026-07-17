@@ -5,6 +5,8 @@
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
+        { "id": "ornith-1.0-9b" },
+        { "id": "ornith-1.0-35b" },
         { "id": "liquid/lfm2-24b-a2b" },
         { "id": "google/gemma-4-12b" },
         { "id": "google/gemma-4-e4b" },
