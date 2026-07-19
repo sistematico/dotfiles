@@ -3,7 +3,7 @@
 mkdir -p "$HOME/Pictures"
 
 dateTime=$(date +%m-%d-%Y-%H:%M:%S)
-file="$HOME/Pictures/screenshot-$dateTime.png"
+file="$HOME/images/screenshot-$dateTime.png"
 
 grim "$file" && \
   wl-copy < "$file" && \

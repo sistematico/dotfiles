@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-mkdir -p "$HOME/Pictures"
+mkdir -p "$HOME/images"
 
 dateTime=$(date +%m-%d-%Y-%H:%M:%S)
-file="$HOME/Pictures/screenshot-$dateTime.png"
+file="$HOME/images/screenshot-$dateTime.png"
 
 geometry=$(slurp) || exit 0
 

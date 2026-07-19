@@ -1,3 +1,4 @@
+export EDITOR=vim
 export BUN_INSTALL="$HOME/.bun"
 export PNPM_HOME="/home/lucas/.local/share/pnpm"
 export N_PREFIX="$HOME/.n"
