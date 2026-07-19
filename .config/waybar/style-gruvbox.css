@@ -247,6 +247,14 @@ menu menuitem:hover {
   color: @fg;
 }
 
+#custom-theme {
+  padding: 0 0 0 6px;
+}
+
+#custom-theme:hover {
+  color: @accent;
+}
+
 @keyframes blink {
   to {
     color: @red;

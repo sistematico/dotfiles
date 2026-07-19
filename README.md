@@ -78,6 +78,7 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
 | `~/.local/bin/screenshot-area.sh` | `~/dotfiles/.local/bin/screenshot-area.sh` |
 | `~/.local/bin/screenshot-full.sh` | `~/dotfiles/.local/bin/screenshot-full.sh` |
+| `~/.local/bin/theme-switcher.sh` | `~/dotfiles/.local/bin/theme-switcher.sh` |
 | `~/.local/bin/video-down.sh` | `~/dotfiles/.local/bin/video-down.sh` |
 | `~/.local/bin/video-shrink.sh` | `~/dotfiles/.local/bin/video-shrink.sh` |
 | `~/.local/bin/ytmusic.sh` | `~/dotfiles/.local/bin/ytmusic.sh` |
@@ -95,17 +96,44 @@ Tema padrão atual: **Gruvbox Dark**. O tema anterior (**Tokyo Night**) foi
 mantido em paralelo — nada foi apagado, só trocado o que cada app carrega
 por padrão.
 
-| App | Padrão atual | Como trocar |
+A troca é feita por um script único, o
+[`theme-switcher.sh`](.local/bin/theme-switcher.sh), em vez de editar cada
+app manualmente (veja a seção "Arquivos recentes" logo abaixo pros
+detalhes).
+
+| App | Padrão atual | Trocado por |
 | --- | --- | --- |
-| Mango | `.config/mango/themes/gruvbox-dark.conf` | edite o `source=` em `config.conf` pra apontar pro `themes/tokyonight.conf` |
-| Waybar | `.config/waybar/style-gruvbox.css` | edite o `@import` em `style.css` pra `style-tokyonight.css` |
-| Rofi | `.config/rofi/gruvbox-dark.rasi` | edite o `@theme` em `config.rasi` pra `tokyonight.rasi` |
-| GTK 3/4 | tema `Colloid-Dark-Gruvbox` (AUR `colloid-gruvbox-gtk-theme-git`) | troque `gtk-theme-name` em `gtk-3.0/settings.ini` e `gtk-4.0/settings.ini` de volta pra `Adwaita-dark`; refaça os symlinks de `~/.config/gtk-4.0/{assets,gtk.css,gtk-dark.css}` apontando pro `~/.themes/Tokyonight-Dark-Storm/gtk-4.0/` (era o destino original) |
-| Kitty | `.config/kitty/themes/gruvbox-dark.conf` | kitty não tinha config antes; era o primeiro tema criado pra ele |
-| Foot | `.config/foot/themes/gruvbox-dark.ini` | edite o `include=` em `foot.ini` pra apontar pro `themes/tokyonight.ini` |
-| Vim | plugin `morhetz/gruvbox` (`.vimrc`) | comente as linhas de `gruvbox`/`colorscheme gruvbox` e descomente as de `tokyonight` no `.vimrc` (plugin `ghifarit53/tokyonight-vim` já instalado) |
-| Neovim | plugin `ellisonleao/gruvbox.nvim` (`.config/nvim/lua/plugins/gruvbox.lua`) | em `gruvbox.lua`, tire o `vim.cmd.colorscheme "gruvbox"` e ponha `lazy = true`; em `tokyo-night.lua`, ponha `lazy = false, priority = 1000` e adicione `vim.cmd.colorscheme "tokyonight"` no `config` |
-| ags-sysmenu | `.local/share/ags-sysmenu/style-gruvbox.css` | edite o `@import` em `style.css` pra `style-tokyonight.css` |
+| Mango | `.config/mango/themes/gruvbox-dark.conf` | `theme-switcher.sh` (edita o `source=` em `config.conf` e dá `mmsg dispatch reload_config`) |
+| Waybar | `.config/waybar/style-gruvbox.css` | `theme-switcher.sh` (edita o `@import` em `style.css`; recarrega sozinho via `reload_style_on_change`) |
+| Rofi | `.config/rofi/gruvbox-dark.rasi` | `theme-switcher.sh` (edita o `@theme` em `config.rasi`) |
+| Mako | `.config/mako/config-gruvbox` (symlink `config` → `config-gruvbox`) | `theme-switcher.sh` (refaz o symlink e dá `makoctl reload`) |
+| Foot | `.config/foot/themes/gruvbox-dark.ini` | `theme-switcher.sh` (edita o `include=` em `foot.ini`; só vale pra terminais novos) |
+| Vim | plugin `morhetz/gruvbox` (`.vimrc`) | `theme-switcher.sh` (alterna os comentários de `airline_theme`/`colorscheme` no `.vimrc`) |
+| Neovim | plugin `ellisonleao/gruvbox.nvim` (`.config/nvim/lua/plugins/gruvbox.lua`) | `theme-switcher.sh` (reescreve `gruvbox.lua`/`tokyo-night.lua` trocando `lazy`/`priority`/`vim.cmd.colorscheme`) |
+| tmux | `~/.tmux/theme` (arquivo de estado, já existia via `toggle-theme.sh`) | `theme-switcher.sh` (escreve o mesmo arquivo de estado e dá `tmux source-file` se já tiver uma sessão aberta) |
+| GTK 3/4 | tema `Colloid-Dark-Gruvbox` (AUR `colloid-gruvbox-gtk-theme-git`) | `theme-switcher.sh` tenta, mas não existe pacote Tokyo Night instalado — ao escolher Tokyo Night ele só avisa e mantém o Gruvbox |
+| Kitty | `.config/kitty/themes/gruvbox-dark.conf` | não coberto pelo script — trocar manualmente |
+| ags-sysmenu | `.local/share/ags-sysmenu/style-gruvbox.css` | não coberto pelo script — edite o `@import` em `style.css` pra `style-tokyonight.css` |
+
+### Arquivos recentes: `theme-switcher.sh`
+
+- **[`.local/bin/theme-switcher.sh`](.local/bin/theme-switcher.sh)** — alterna
+  o tema (Gruvbox Dark ⇄ Tokyo Night) do foot, rofi, mango, waybar, mako,
+  gtk, nvim, vim e tmux com um comando só, gravando o tema ativo em
+  `~/.config/theme-switcher/current`. Subcomandos:
+  - `theme-switcher.sh set <gruvbox-dark|tokyonight>` — aplica um tema específico
+  - `theme-switcher.sh toggle` — alterna entre os dois
+  - `theme-switcher.sh menu` — abre um menu no rofi pra escolher
+  - `theme-switcher.sh current` — imprime o id do tema ativo
+  - `theme-switcher.sh status` — imprime JSON pro custom module da waybar
+
+  Depois de aplicar, ele dispara `mmsg dispatch reload_config` (mango) e
+  `makoctl reload` (mako); waybar se recarrega sozinho por causa do
+  `reload_style_on_change` no `config.jsonc`.
+- **Módulo `custom/theme` em [`.config/waybar/config.jsonc`](.config/waybar/config.jsonc)**
+  — mostra o tema ativo na barra (🎨 Gruvbox Dark / 🎨 Tokyo Night) via
+  `theme-switcher.sh status`; clicar abre `theme-switcher.sh menu`, que já
+  troca e recarrega tudo.
 
 ### Paleta de cores
 

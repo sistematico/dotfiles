@@ -1,10 +1,11 @@
 {
   "providers": {
-    "ollama": {
+    "lmstudio": {
       "baseUrl": "http://localhost:1234/v1",
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
+        { "id": "qwen/qwen3-coder-next" },
         { "id": "ornith-1.0-9b" },
         { "id": "ornith-1.0-35b" },
         { "id": "liquid/lfm2-24b-a2b" },

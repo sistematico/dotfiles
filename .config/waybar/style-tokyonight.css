@@ -129,7 +129,8 @@ menu menuitem:hover {
 #custom-notifications,
 #custom-video-down,
 #custom-applauncher,
-#custom-bg {
+#custom-bg,
+#custom-theme {
   padding: 0px 8px;
 }
 
@@ -252,6 +253,14 @@ menu menuitem:hover {
 
 #custom-bg:hover {
   color: @fg;
+}
+
+#custom-theme {
+  padding: 0 0 0 6px;
+}
+
+#custom-theme:hover {
+  color: @accent;
 }
 
 @keyframes blink {

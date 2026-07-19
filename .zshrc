@@ -242,3 +242,6 @@ export PATH="/home/lucas/.kimi-code/bin:$PATH"
 
 # mimocode
 export PATH=/home/lucas/.mimocode/bin:$PATH
+
+# opencode
+export PATH=/home/lucas/.opencode/bin:$PATH

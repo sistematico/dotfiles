@@ -14,6 +14,7 @@
   "modules-left": [
     "mango/workspaces",
     "custom/applauncher",
+    "custom/theme",
     "custom/video-down"
   ],
   "modules-center": [
@@ -79,6 +80,13 @@
   "custom/bg": {
     "format": "{}",
     "on-click": "~/.local/bin/rofi-wallpaper.sh"
+  },
+  "custom/theme": {
+    "exec": "~/.local/bin/theme-switcher.sh status",
+    "return-type": "json",
+    "format": "{}",
+    "interval": "once",
+    "on-click": "~/.local/bin/theme-switcher.sh menu"
   },
   "idle_inhibitor": {
     "format": "{icon}",
