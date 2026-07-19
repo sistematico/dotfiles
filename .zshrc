@@ -136,13 +136,13 @@ function list-fonts() {
 
 # ssh
 function fullsync() {
-  [ ! -d $STORAGE/vps/$1 ] && mkdir -p $STORAGE/vps/${1}
+  [ ! -d $HOME/vps/$1 ] && mkdir -p $HOME/vps/${1}
   local machine="$1"
   shift
 
   rsync -aAXvzz \
     --exclude-from "$HOME/.config/rsync-excludes.list" \
-    root@${machine}:/ $STORAGE/vps/${machine}/ \
+    root@${machine}:/ $HOME/vps/${machine}/ \
     "$@"
 }
 
@@ -238,3 +238,6 @@ PROMPT='%F{cyan}%n%f in %F{yellow}%~%f${vcs_info_msg_0_}$(git_stash_count)$(git_
 source /usr/share/doc/pkgfile/command-not-found.zsh
 # kimi-code
 export PATH="/home/lucas/.kimi-code/bin:$PATH"
+
+# mimocode
+export PATH=/home/lucas/.mimocode/bin:$PATH

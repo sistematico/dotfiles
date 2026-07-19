@@ -4,6 +4,42 @@ Meus arquivos de configuração pessoais (dotfiles) — shell, editor, SSH e
 afins — versionados em Git para facilitar backup e replicação em novas
 máquinas.
 
+## Sistema
+
+- **Distro:** Arch Linux (rolling)
+- **Kernel:** Linux 7.1.3-arch2-1
+- **CPU:** Intel Core Ultra 9 285K
+- **GPU:** Intel Graphics (Arrow Lake-S, iGPU) + NVIDIA GeForce RTX 5060 Ti
+- **RAM:** 62 GiB
+- **Sessão:** Wayland (sem DE — apenas WM + utilitários avulsos)
+- **Compositor / WM:** [Mango](https://github.com/DreamMaoMao/mango) (dwm-like, tiling em Wayland), compilado a partir do código-fonte
+- **Barra de status:** [Waybar](https://github.com/Alexays/Waybar)
+- **Launcher:** [Rofi](https://github.com/davatorium/rofi) (`drun`, `rofi-pass`, toggle de apps próprio)
+- **Notificações:** [Mako](https://github.com/emersion/mako)
+- **Lockscreen:** [Swaylock](https://github.com/swaywm/swaylock)
+- **Menu de logout:** [Wlogout](https://github.com/ArtsyMacaw/wlogout)
+- **Terminais:** [Foot](https://codeberg.org/dnkl/foot) (principal) e [Kitty](https://sw.kovidgoyal.net/kitty/)
+- **Shell:** Zsh + [tmux](https://github.com/tmux/tmux)
+- **Editor:** [Neovim](https://neovim.io/) (config em Lua) + Vim (`.vimrc`, config mais simples pra quando nvim não tá disponível)
+- **Gerenciador de arquivos:** [Thunar](https://docs.xfce.org/xfce/thunar/start), com Custom Actions próprias (`dotfile-track.sh` e outras)
+- **Música:** [MPD](https://www.musicpd.org/) + [ncmpcpp](https://ncmpcpp.rocks/) (cliente TUI) + `ytmusic.sh` (baixa do YouTube/YouTube Music)
+- **Vídeo:** [mpv](https://mpv.io/), com scripts próprios de download (`video-down.sh`) e compactação via GPU/NVENC (`video-shrink.sh`)
+- **IRC:** [senpai](https://sr.ht/~taiite/senpai/), compilado a partir do código-fonte
+- **Senhas:** [pass](https://www.passwordstore.org/) + `rofi-pass.sh` (menu no rofi) — cofre em repositório Git separado
+- **Screenshot/gravação de tela:** `grim`/`slurp` via `screenshot-area.sh`/`screenshot-full.sh`, `wf-recorder` via `screen-recorder.sh`
+- **Disco:** LUKS gerenciado por `luks.sh`
+- **GTK 3/4:** tema [Colloid](https://github.com/vinceliuice/Colloid-gtk-theme) (variante Gruvbox, AUR `colloid-gruvbox-gtk-theme-git`) + ícones Papirus-Dark
+- **Fontes:** Nerd Fonts (UbuntuMono Nerd Font Mono, JetBrainsMono Nerd Font, Monaspace, entre outras)
+- **IA/commits:** `aicommit.sh` gera mensagens de commit usando um modelo local via [LM Studio](https://lmstudio.ai/) (`lms`, servidor OpenAI-compatible em `localhost:1234`)
+
+### Screenshots
+
+| | |
+| --- | --- |
+| Desktop (Waybar + Mango) | ![Desktop](.assets/desktop.png) |
+| Rofi (`drun`) | ![Rofi](.assets/rofi-drun.png) |
+| Waybar (detalhe) | ![Waybar](.assets/waybar-closeup.png) |
+
 ## Symlinks
 
 Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para dentro deste repositório, e o que já está "trackeado" aqui. Mantida automaticamente pelo script `dotfile-track.sh` (Thunar Custom Action) sempre que um novo item é movido para cá.
@@ -63,10 +99,50 @@ por padrão.
 | GTK 3/4 | tema `Colloid-Dark-Gruvbox` (AUR `colloid-gruvbox-gtk-theme-git`) | troque `gtk-theme-name` em `gtk-3.0/settings.ini` e `gtk-4.0/settings.ini` de volta pra `Adwaita-dark`; refaça os symlinks de `~/.config/gtk-4.0/{assets,gtk.css,gtk-dark.css}` apontando pro `~/.themes/Tokyonight-Dark-Storm/gtk-4.0/` (era o destino original) |
 | Kitty | `.config/kitty/themes/gruvbox-dark.conf` | kitty não tinha config antes; era o primeiro tema criado pra ele |
 | Foot | `.config/foot/themes/gruvbox-dark.ini` | edite o `include=` em `foot.ini` pra apontar pro `themes/tokyonight.ini` |
+| Vim | plugin `morhetz/gruvbox` (`.vimrc`) | comente as linhas de `gruvbox`/`colorscheme gruvbox` e descomente as de `tokyonight` no `.vimrc` (plugin `ghifarit53/tokyonight-vim` já instalado) |
+| Neovim | plugin `ellisonleao/gruvbox.nvim` (`.config/nvim/lua/plugins/gruvbox.lua`) | em `gruvbox.lua`, tire o `vim.cmd.colorscheme "gruvbox"` e ponha `lazy = true`; em `tokyo-night.lua`, ponha `lazy = false, priority = 1000` e adicione `vim.cmd.colorscheme "tokyonight"` no `config` |
+| ags-sysmenu | `.local/share/ags-sysmenu/style-gruvbox.css` | edite o `@import` em `style.css` pra `style-tokyonight.css` |
+
+### Paleta de cores
+
+**Gruvbox Dark**
+
+| Cor | Hex | |
+| --- | --- | --- |
+| bg (background) | `#282828` | ![#282828](.assets/colors/gruvbox-bg.png) |
+| bg1 | `#3c3836` | ![#3c3836](.assets/colors/gruvbox-bg1.png) |
+| bg2 | `#504945` | ![#504945](.assets/colors/gruvbox-bg2.png) |
+| bg3 (comment/gray) | `#928374` | ![#928374](.assets/colors/gruvbox-gray.png) |
+| fg (foreground) | `#ebdbb2` | ![#ebdbb2](.assets/colors/gruvbox-fg.png) |
+| red | `#fb4934` | ![#fb4934](.assets/colors/gruvbox-red.png) |
+| green | `#b8bb26` | ![#b8bb26](.assets/colors/gruvbox-green.png) |
+| yellow | `#fabd2f` | ![#fabd2f](.assets/colors/gruvbox-yellow.png) |
+| blue | `#83a598` | ![#83a598](.assets/colors/gruvbox-blue.png) |
+| purple/magenta | `#d3869b` | ![#d3869b](.assets/colors/gruvbox-purple.png) |
+| aqua/cyan | `#8ec07c` | ![#8ec07c](.assets/colors/gruvbox-aqua.png) |
+| orange | `#fe8019` | ![#fe8019](.assets/colors/gruvbox-orange.png) |
+
+**Tokyo Night**
+
+| Cor | Hex | |
+| --- | --- | --- |
+| bg (background) | `#1a1b26` | ![#1a1b26](.assets/colors/tokyonight-bg.png) |
+| bg1 | `#1d202f` | ![#1d202f](.assets/colors/tokyonight-bg1.png) |
+| bg2 (selection) | `#33467c` | ![#33467c](.assets/colors/tokyonight-bg2.png) |
+| bg3 (border/gray) | `#414868` | ![#414868](.assets/colors/tokyonight-gray.png) |
+| fg (foreground) | `#c0caf5` | ![#c0caf5](.assets/colors/tokyonight-fg.png) |
+| red | `#f7768e` | ![#f7768e](.assets/colors/tokyonight-red.png) |
+| green | `#9ece6a` | ![#9ece6a](.assets/colors/tokyonight-green.png) |
+| yellow | `#e0af68` | ![#e0af68](.assets/colors/tokyonight-yellow.png) |
+| blue | `#7aa2f7` | ![#7aa2f7](.assets/colors/tokyonight-blue.png) |
+| purple/magenta | `#bb9af7` | ![#bb9af7](.assets/colors/tokyonight-purple.png) |
+| cyan | `#7dcfff` | ![#7dcfff](.assets/colors/tokyonight-cyan.png) |
+| teal/aqua | `#73daca` | ![#73daca](.assets/colors/tokyonight-teal.png) |
+| orange | `#ff9e64` | ![#ff9e64](.assets/colors/tokyonight-orange.png) |
 
 Este repositório é hospedado em dois lugares ao mesmo tempo:
 
-- **Fonte principal:** [git.paxa.dev](https://git.paxa.dev/lucas/Dotfiles) — servidor Git próprio (repositórios bare)
+- **Fonte principal:** [git.paxa.dev](https://git.paxa.dev/lucas/dotfiles) — servidor Git próprio (repositórios bare)
 - **Espelho:** [GitHub](https://github.com/sistematico/dotfiles)
 
 ## Configurando o push duplo
@@ -77,10 +153,10 @@ que é a fonte de verdade; o GitHub funciona como espelho.
 
 ```sh
 # 1. Crie o remote apontando para o servidor próprio (URL usada para fetch)
-git remote add origin git@git.paxa.dev:lucas/Dotfiles.git
+git remote add origin git@git.paxa.dev:lucas/dotfiles.git
 
 # 2. Adicione as duas URLs de push
-git remote set-url --add --push origin git@git.paxa.dev:lucas/Dotfiles.git
+git remote set-url --add --push origin git@git.paxa.dev:lucas/dotfiles.git
 git remote set-url --add --push origin git@github.com:sistematico/dotfiles.git
 ```
 
@@ -92,8 +168,8 @@ Verifique a configuração:
 
 ```sh
 git remote -v
-# origin  git@git.paxa.dev:lucas/Dotfiles.git (fetch)
-# origin  git@git.paxa.dev:lucas/Dotfiles.git (push)
+# origin  git@git.paxa.dev:lucas/dotfiles.git (fetch)
+# origin  git@git.paxa.dev:lucas/dotfiles.git (push)
 # origin  git@github.com:sistematico/dotfiles.git (push)
 ```
 
@@ -104,7 +180,7 @@ git remote -v
 Se o repositório bare ainda não existir no servidor:
 
 ```sh
-ssh git@git.paxa.dev "mkdir -p lucas && git init --bare lucas/Dotfiles.git"
+ssh git@git.paxa.dev "mkdir -p lucas && git init --bare lucas/dotfiles.git"
 ```
 
 Convém ter um host configurado no `~/.ssh/config`:

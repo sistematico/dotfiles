@@ -74,6 +74,13 @@ fi
 [ ! -f "$HASH_DB" ] && touch "$HASH_DB"
 
 LAST_NOTIFY=0
+escape_markup() {
+    local s="$1"
+    s="${s//&/&amp;}"
+    s="${s//</&lt;}"
+    s="${s//>/&gt;}"
+    echo "$s"
+}
 safe_notify() {
     local now=$(date +%s)
     if (( now - LAST_NOTIFY < 3 )); then
@@ -241,9 +248,9 @@ add_queue() {
     
     # Adiciona
     echo "$url" >> "$QUEUE_FILE"
-    
+
     local pos=$(wc -l < "$QUEUE_FILE")
-    safe_notify "Adicionado à fila!\n\nPosição: #$pos\nAtivos: $(count_active)/$MAX_PARALLEL_DOWNLOADS"
+    safe_notify "Adicionado à fila!\n\nPosição: #$pos\nAtivos: $(count_active)/$MAX_PARALLEL_DOWNLOADS\n🔗 $(escape_markup "$url")"
 }
 
 # Pega próxima URL
@@ -330,7 +337,7 @@ do_download() {
     startdate=$(date '+%H:%M:%S')
     start=$(date +%s)
 
-    safe_notify "Baixando:\n<b>$arquivo</b>"
+    safe_notify "Baixando:\n<b>$(escape_markup "$arquivo")</b>\n🔗 $(escape_markup "$url")"
 
     # Download
     OPTS=(

@@ -85,9 +85,9 @@ menu menuitem:hover {
   /* No background */
   box-shadow: none;
   text-shadow: none;
-  padding: 0px 10px;
+  padding: 0px 6px;
   color: @comment;
-  font-size: 22px;
+  font-size: 20px;
   /* Large icons for workspaces */
   transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -128,8 +128,13 @@ menu menuitem:hover {
 #custom-menu,
 #custom-notifications,
 #custom-video-down,
-#custom-applauncher {
+#custom-applauncher,
+#custom-bg {
   padding: 0px 8px;
+}
+
+#tray {
+  padding-right: 16px;
 }
 
 #clock {
@@ -237,6 +242,16 @@ menu menuitem:hover {
 
 #custom-pass {
   color: @red;
+  font-size: 28px;
+}
+
+#custom-bg {
+  color: @teal;
+  font-size: 28px;
+}
+
+#custom-bg:hover {
+  color: @fg;
 }
 
 @keyframes blink {

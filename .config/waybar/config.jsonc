@@ -21,12 +21,13 @@
   ],
   "modules-right": [
     "custom/cliphist",
-    "custom/pass",
+    //"custom/pass",
+    "custom/bg",
     "idle_inhibitor",
     "cpu",
-    // "memory",
+    "memory",
     // "disk",
-    // "temperature",
+    "temperature",
     "wireplumber#sink",
     "tray",
     "clock",
@@ -44,7 +45,6 @@
       "active": "●"
     }
   },
-  // 
   "custom/applauncher": {
     "format": "",
     "on-click": "rofi -show drun"
@@ -57,8 +57,6 @@
     "on-click": "~/.local/bin/video-down.sh"
   },
   "mango/window": {
-    //"format": "{}",
-    //"icon-size": 20
     "format": "{title}",
     "rewrite": {
       "(.*) - Mozilla Firefox": "🌎 $1",
@@ -70,14 +68,17 @@
   "custom/cliphist": {
     "format": "{}",
     "rotate": 0,
-    // "exec": "echo ; echo 󰅇 clipboard history",
     "on-click": "~/.local/bin/clip-history.sh menu",
     "on-click-right": "~/.local/bin/clip-history.sh clear"
   },
   "custom/pass": {
-    "format": "{}",
+    "format": "{}",
     "rotate": 45,
-    "on-click": "~/.local/bin/rofi-pass.sh",
+    "on-click": "~/.local/bin/rofi-pass.sh"
+  },
+  "custom/bg": {
+    "format": "{}",
+    "on-click": "~/.local/bin/rofi-wallpaper.sh"
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -89,6 +90,11 @@
   },
   "cpu": {
     "interval": 10,
+    "format": " {}%",
+    "max-length": 10
+  },
+  "memory": {
+    "interval": 30,
     "format": " {}%",
     "max-length": 10
   },
@@ -108,37 +114,27 @@
   //     "󰪥"
   //   ]
   // },
-  "memory": {
-    "interval": 1,
-    "rotate": 0,
-    "format": " {icon}",
-    "format-icons": [
-      "󰝦",
-      "󰪞",
-      "󰪟",
-      "󰪠",
-      "󰪡",
-      "󰪢",
-      "󰪣",
-      "󰪤",
-      "󰪥"
-    ],
-    "max-length": 10
-  },
+  // "memory": {
+  //   "interval": 1,
+  //   "rotate": 0,
+  //   "format": " {icon}",
+  //   "format-icons": [
+  //     "󰝦",
+  //     "󰪞",
+  //     "󰪟",
+  //     "󰪠",
+  //     "󰪡",
+  //     "󰪢",
+  //     "󰪣",
+  //     "󰪤",
+  //     "󰪥"
+  //   ],
+  //   "max-length": 10
+  // },
   "disk": {
     "interval": 30,
     "format": " {percentage_used}%",
   },
-  //  "disk": {
-  //    "interval": 30,
-  //    "format": "{path} {percentage_free}%",
-  //    "header": " ",
-  //    "paths": [
-  //      "/",
-  //      "/home"
-  //    ],
-  //    "separator": " "
-  //  },
   "temperature": {
     "hwmon-path": "/sys/class/hwmon/hwmon8/temp1_input",
     // "critical-threshold": 80,
@@ -148,7 +144,7 @@
   "tray": {
     "icon-size": 16,
     "rotate": 0,
-    "spacing": 3
+    "spacing": 10
   },
   "wireplumber#sink": {
     "format": "<span></span> {volume}%",
@@ -164,24 +160,6 @@
     "format-muted": "",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "scroll-step": 5
-  },
-  "network": {
-    "tooltip": true,
-    "format-wifi": "{icon} ",
-    "format-icons": [
-      "󰤟",
-      "󰤢",
-      "󰤥"
-    ],
-    //  "format-wifi": "<i class='fa-solid fa-wifi-slash'></i>",
-    "rotate": 0,
-    "format-ethernet": "󰈀 ",
-    "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>",
-    "format-linked": "󰈀 {ifname} (No IP)",
-    "format-disconnected": " ",
-    "tooltip-format-disconnected": "Disconnected",
-    "on-click": "/usr/local/bin/ags -t ControlPanel",
-    "interval": 2
   },
   "pulseaudio": {
     "format": "{icon}",
@@ -223,9 +201,8 @@
     "scroll-step": 1
   },
   "clock": {
-    "format": "<span></span> {:%I:%M %p}",
+    "format": " {:%I:%M}",
     "rotate": 0,
-    "on-click": "/usr/local/bin/ags -t ActivityCenter",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
       "mode": "month",

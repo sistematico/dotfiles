@@ -1,4 +1,4 @@
-# Gruvbox Dark theme for mako
+# Tokyo Night theme for mako
 
 font=JetBrainsMono NFM 11
 width=340
@@ -14,22 +14,22 @@ ignore-timeout=0
 layer=overlay
 anchor=top-right
 
-background-color=#282828e6
-text-color=#ebdbb2
-border-color=#458588
+background-color=#1a1b26e6
+text-color=#c0caf5
+border-color=#7aa2f7
 
-progress-color=over #3c3836
+progress-color=over #33467c
 
 [urgency=low]
-border-color=#928374
+border-color=#565f89
 default-timeout=4000
 
 [urgency=normal]
-border-color=#458588
+border-color=#7aa2f7
 
 [urgency=high]
-border-color=#fb4934
-text-color=#fb4934
+border-color=#f7768e
+text-color=#f7768e
 default-timeout=0
 
 [mode=do-not-disturb]
