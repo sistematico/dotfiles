@@ -27,25 +27,21 @@
   padding: 0;
 }
 
+
 window#waybar {
   background: rgba(40, 40, 40, 0.85);
-  /* External glassmorphism background */
   color: @fg;
   border: 3px solid rgba(131, 165, 152, 0.2);
-  /* External border only */
   border-radius: 8px;
-  min-height: 64px;
-  /* Thickened bar physically, without increasing text font size */
-  padding: 0px 12px;
 }
 
 tooltip {
   font-family: "Ubuntu Nerd Font", sans-serif;
   background: rgba(29, 32, 33, 0.95);
   color: @fg;
-  font-size: 13px;
-  border-radius: 8px;
-  border: 1px solid rgba(131, 165, 152, 0.3);
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid rgba(131, 165, 152, 0.3);
 }
 
 menu {
@@ -75,19 +71,16 @@ menu menuitem:hover {
   color: @fg;
 }
 
-/* Minimalist Workspaces (No inner background hover or borders) */
 #workspaces {
-  margin: 0px 6px;
+  margin-left: 10px;
 }
 
+/* Minimalist Workspaces (No inner background hover or borders) */
 #workspaces button {
   background: transparent;
-  /* No background */
   box-shadow: none;
   text-shadow: none;
-  padding: 0px 6px;
   color: @comment;
-  font-size: 20px;
   /* Large icons for workspaces */
   transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }

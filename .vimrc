@@ -20,7 +20,8 @@ nnoremap <C-o> :wa!<cr>
 nnoremap <F6> :%!shfmt -i 2 -ci -sr -kp<return>
 inoremap <F6> <esc>:%!shfmt -i 2 -ci -sr -kp<return>
 
-let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_transparent_bg = 1
+" let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_italic = 1
 
 " Colorscheme (troque as 2 linhas abaixo pra mudar de tema)

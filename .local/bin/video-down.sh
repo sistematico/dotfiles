@@ -250,7 +250,7 @@ add_queue() {
     echo "$url" >> "$QUEUE_FILE"
 
     local pos=$(wc -l < "$QUEUE_FILE")
-    safe_notify "Adicionado à fila!\n\nPosição: #$pos\nAtivos: $(count_active)/$MAX_PARALLEL_DOWNLOADS\n🔗 $(escape_markup "$url")"
+    safe_notify "Adicionado à fila: #$pos - Ativos: $(count_active)/$MAX_PARALLEL_DOWNLOADS\n🔗 $(escape_markup "$url")"
 }
 
 # Pega próxima URL

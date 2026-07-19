@@ -10,13 +10,13 @@ STATE_FILE="$HOME/.config/mango/wallpaper/current"
 THEME="$HOME/.config/rofi/gruvbox-dark.rasi"
 
 notify() {
-  notify-send -u "$1" "Wallpaper" "$2" 2>/dev/null || true
+  notify-send -i $HOME/.local/share/icons/Newaita-reborn/apps/48/org.gnome.eog.svg -u "$1" "Wallpaper" "$2" 2>/dev/null || true
 }
 
 mapfile -t files < <(
   find "${WALLPAPER_DIRS[@]}" -maxdepth 1 -type f \
-    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null \
-    | sort
+    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null |
+    sort
 )
 
 if [ "${#files[@]}" -eq 0 ]; then
@@ -34,10 +34,10 @@ done
 # arquivo). Aplicado por cima do tema compartilhado via -theme-str, sem
 # tocar nos arquivos .rasi usados pelos outros menus do rofi.
 GRID_OVERRIDE='
-window { height: 55%; }
-listview { columns: 3; spacing: 16px; }
+window { height: 60%; }
+listview { columns: 3; spacing: 10px; }
 element { orientation: vertical; }
-element-icon { size: 220px; }
+element-icon { size: 200px; }
 element-text { enabled: false; }
 '
 
@@ -62,6 +62,6 @@ pkill -x swaybg 2>/dev/null || true
 setsid -f swaybg -i "$chosen" -m fill >/dev/null 2>&1
 
 mkdir -p "$(dirname "$STATE_FILE")"
-printf '%s\n' "$chosen" > "$STATE_FILE"
+printf '%s\n' "$chosen" >"$STATE_FILE"
 
 notify normal "Papel de parede alterado para '$selection'."
