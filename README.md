@@ -4,6 +4,10 @@ Meus arquivos de configuração pessoais (dotfiles) — shell, editor, SSH e
 afins — versionados em Git para facilitar backup e replicação em novas
 máquinas.
 
+## Screenshots
+
+![Meu desktop](./.assets/desktop.png)
+
 ## Sistema
 
 - **Distro:** Arch Linux (rolling)
