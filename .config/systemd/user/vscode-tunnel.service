@@ -1,0 +1,12 @@
+[Unit]
+Description=VS Code Remote Tunnel Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/code tunnel --accept-server-license-terms
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

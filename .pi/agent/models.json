@@ -1,17 +1,11 @@
 {
   "providers": {
-    "lmstudio": {
-      "baseUrl": "http://localhost:1234/v1",
+    "vllm": {
+      "baseUrl": "http://localhost:8000/v1",
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
-        { "id": "qwen/qwen3-coder-next" },
-        { "id": "ornith-1.0-9b" },
-        { "id": "ornith-1.0-35b" },
-        { "id": "liquid/lfm2-24b-a2b" },
-        { "id": "google/gemma-4-12b" },
-        { "id": "google/gemma-4-e4b" },
-        { "id": "qwen2.5-coder:7b" }
+        { "id": "google/gemma-7b" }
       ]
     }
   }

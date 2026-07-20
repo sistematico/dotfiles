@@ -1,3 +1,5 @@
+export LLAMA_BASE_URL=http://127.0.0.1:1080
+export LLAMA_API_KEY=key
 export EDITOR=vim
 export BUN_INSTALL="$HOME/.bun"
 export PNPM_HOME="/home/lucas/.local/share/pnpm"

@@ -1,0 +1,9 @@
+{
+  "providers": {
+    "llama": {
+      "baseUrl": "http://localhost:1080",
+      "api": "openai-completions",
+      "apiKey": "key"
+    }
+  }
+}

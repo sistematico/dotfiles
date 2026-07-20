@@ -1,8 +1,8 @@
--- Instalado mas inativo. Pra voltar a usar: mude lazy=false e priority=1000
--- aqui, e desative o vim.cmd.colorscheme "gruvbox" em gruvbox.lua.
+-- Tema padrão atual. Pra voltar pro Gruvbox, veja gruvbox.lua.
 return {
   "folke/tokyonight.nvim",
-  lazy = true,
+  lazy = false,
+  priority = 1000,
   opts = {
     -- "night" matches the background kitty currently uses (#1a1b26)
     style = "night",
@@ -14,5 +14,6 @@ return {
   },
   config = function(_, opts)
     require("tokyonight").setup(opts)
+    vim.cmd.colorscheme "tokyonight"
   end,
 }

@@ -8,5 +8,5 @@ configuration {
     me-accept-entry: "!MousePrimary";
 }
 
-/* @theme "~/.config/rofi/tokyonight.rasi" */
-@theme "~/.config/rofi/gruvbox-dark.rasi"
+@theme "~/.config/rofi/tokyonight.rasi"
+/* @theme "~/.config/rofi/gruvbox-dark.rasi" */

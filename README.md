@@ -74,6 +74,7 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.config/wlogout` | `~/dotfiles/.config/wlogout` |
 | `~/.local/bin/aicommit.sh` | `~/dotfiles/.local/bin/aicommit.sh` |
 | `~/.local/bin/dotfile-track.sh` | `~/dotfiles/.local/bin/dotfile-track.sh` |
+| `~/.local/bin/ram.sh` | `~/dotfiles/.local/bin/ram.sh` |
 | `~/.local/bin/rofi-pass.sh` | `~/dotfiles/.local/bin/rofi-pass.sh` |
 | `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
 | `~/.local/bin/screenshot-area.sh` | `~/dotfiles/.local/bin/screenshot-area.sh` |

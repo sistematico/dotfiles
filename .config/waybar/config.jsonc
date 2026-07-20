@@ -26,7 +26,7 @@
     "custom/bg",
     "idle_inhibitor",
     "cpu",
-    "memory",
+    "custom/ram",
     // "disk",
     "temperature",
     "wireplumber#sink",
@@ -101,11 +101,18 @@
     "format": " {}%",
     "max-length": 10
   },
-  "memory": {
-    "interval": 30,
-    "format": " {}%",
-    "max-length": 10
+  "custom/ram": {
+    "exec": "~/.config/waybar/scripts/ram.sh",
+    "return-type": "json",
+    "format": "{}",
+    "interval": 5,
+    "tooltip": true
   },
+  // "memory": {
+  //   "interval": 30,
+  //  "format": " {}%",
+  //   "max-length": 10
+  // },
   // "cpu": {
   //   "interval": 1,
   //   "format": " {icon}",

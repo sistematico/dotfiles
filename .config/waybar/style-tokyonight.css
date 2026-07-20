@@ -116,6 +116,7 @@ menu menuitem:hover {
 #pulseaudio,
 #cpu,
 #memory,
+#custom-ram,
 #disk,
 #network,
 #temperature,
@@ -170,7 +171,8 @@ menu menuitem:hover {
   color: @purple;
 }
 
-#memory {
+#memory,
+#custom-ram {
   color: @orange;
 }
 
