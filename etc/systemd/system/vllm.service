@@ -10,35 +10,29 @@ Group=lucas
 
 # Optional: Add your Hugging Face / ModelScope token if serving gated models
 Environment="HUGGING_FACE_HUB_TOKEN=hf_your_token_here"
+# Needed so vLLM's runtime deps (ninja, etc.) inside the venv are found
+Environment="PATH=/home/lucas/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/bin"
 # Optional: Enforce CUDA/ROCm visible devices if managing multiple GPUs
 # Environment="CUDA_VISIBLE_DEVICES=0"
 
 # Path to your vllm binary. Replace with your actual virtualenv path if applicable.
 WorkingDirectory=/home/lucas
-ExecStart=/home/lucas/.venv/bin/vllm serve "google/gemma-7b" \
-    --host 127.0.0.1 \
-    --port 8000 \
-    --quantization bitsandbytes \
-    --load-format bitsandbytes \   
-    --gpu-memory-utilization 0.50 \
-    --max-model-len 2048
-
-# --max-model-len 4096
-# --quantization awq \
+ExecStart=/home/lucas/.venv/bin/vllm serve --config /home/lucas/.config/vllm/config.yaml
 
 # Restart policy for production resilience
 Restart=on-failure
 RestartSec=10
 
 # Security and Sandbox Constraints (vLLM is partially incompatible with strict sandbox controls)
-PrivateTmp=true
-ProtectSystem=full
-#ProtectHome=tmpfs
+PrivateTmp=false
+#ProtectSystem=full
+ProtectSystem=false
 #ProtectHome=read-only
+#ProtectHome=tmpfs
 ProtectHome=false
 
 # Libera gravação apenas na pasta de cache do Hugging Face e vLLM
-ReadWritePaths=/home/lucas/.cache/huggingface /home/lucas/.config/vllm
+#ReadWritePaths=/home/lucas/.cache/huggingface /home/lucas/.config/vllm
 
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 

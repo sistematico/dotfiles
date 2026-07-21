@@ -2,30 +2,78 @@
 <actions>
 <action>
 	<icon>utilities-terminal</icon>
-	<name>Open Terminal Here</name>
+	<name>Abrir no Foot</name>
 	<submenu></submenu>
 	<unique-id>1783816654147248-1</unique-id>
-	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
-	<description>Example for a custom action</description>
+	<command>foot -D %f</command>
+	<description>Abrir o foot no diretório selecionado</description>
 	<range></range>
 	<patterns>*</patterns>
 	<startup-notify/>
 	<directories/>
 </action>
 <action>
-	<icon>folder-symbolic-link</icon>
-	<name>Mover para ~/dotfiles e criar symlink</name>
+	<icon>realtimesync</icon>
+	<name>Mover Dotfiles</name>
 	<submenu></submenu>
 	<unique-id>1783816654147248-2</unique-id>
 	<command>dotfile-track.sh %F</command>
 	<description>Move o arquivo/pasta selecionado para ~/dotfiles (preservando a estrutura de caminho) e cria um symlink no lugar original, atualizando a tabela em ~/dotfiles/README.md</description>
 	<range></range>
 	<patterns>*</patterns>
-	<image-files/>
-	<video-files/>
+	<directories/>
 	<audio-files/>
+	<image-files/>
 	<other-files/>
 	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>vscode</icon>
+	<name>Abrir no Code</name>
+	<submenu></submenu>
+	<unique-id>1783994845873153-1</unique-id>
+	<command>code %f</command>
+	<description>Abre a seleção no Visual Studio Code</description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+	<text-files/>
+</action>
+<action>
+	<icon>zed</icon>
+	<name>Abrir com Zed</name>
+	<submenu></submenu>
+	<unique-id>1784223627018710-1</unique-id>
+	<command>zed %f</command>
+	<description>Abre no Zed Editor</description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+	<text-files/>
+</action>
+<action>
+	<icon>changes-prevent</icon>
+	<name>fscrypt: Encriptar diretório</name>
+	<submenu></submenu>
+	<unique-id>1784223627018710-2</unique-id>
+	<command>foot -e fscrypt-encrypt.sh %F</command>
+	<description>Encripta o(s) diretório(s) selecionado(s) (precisam estar vazios) com fscrypt, pedindo a senha do protector em um terminal</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>changes-allow</icon>
+	<name>fscrypt: Desencriptar diretório</name>
+	<submenu></submenu>
+	<unique-id>1784223627018710-3</unique-id>
+	<command>foot -e fscrypt-decrypt.sh %F</command>
+	<description>Desbloqueia (unlock) o(s) diretório(s) encriptado(s) com fscrypt selecionado(s), pedindo a senha em um terminal</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
 	<directories/>
 </action>
 </actions>

@@ -74,6 +74,8 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.config/wlogout` | `~/dotfiles/.config/wlogout` |
 | `~/.local/bin/aicommit.sh` | `~/dotfiles/.local/bin/aicommit.sh` |
 | `~/.local/bin/dotfile-track.sh` | `~/dotfiles/.local/bin/dotfile-track.sh` |
+| `~/.local/bin/fscrypt-encrypt.sh` | `~/dotfiles/.local/bin/fscrypt-encrypt.sh` |
+| `~/.local/bin/fscrypt-decrypt.sh` | `~/dotfiles/.local/bin/fscrypt-decrypt.sh` |
 | `~/.local/bin/ram.sh` | `~/dotfiles/.local/bin/ram.sh` |
 | `~/.local/bin/rofi-pass.sh` | `~/dotfiles/.local/bin/rofi-pass.sh` |
 | `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
@@ -135,6 +137,27 @@ detalhes).
   — mostra o tema ativo na barra (🎨 Gruvbox Dark / 🎨 Tokyo Night) via
   `theme-switcher.sh status`; clicar abre `theme-switcher.sh menu`, que já
   troca e recarrega tudo.
+
+### Parando de versionar um arquivo sem apagá-lo
+
+O `.config/mango/wallpaper/current` guarda o estado do papel de parede
+atual e muda toda vez que você troca o wallpaper — por isso ele está no
+`.gitignore`. Mas se o arquivo já estava sendo rastreado **antes** de
+entrar no `.gitignore`, o Git continua de olho nele e ele aparece como
+modificado a cada troca, já que o `.gitignore` só se aplica a arquivos
+novos/não rastreados.
+
+Pra resolver isso — parar de rastrear sem apagar o arquivo do disco —
+basta tirá-lo do índice:
+
+```sh
+git rm --cached caminho/do/arquivo
+```
+
+Depois é só commitar essa remoção normalmente. O arquivo continua
+existindo no filesystem (o `--cached` afeta só o índice do Git), mas o
+Git deixa de rastrear mudanças nele — e como ele já está no
+`.gitignore`, não volta a ser sugerido em `git add`/`git status`.
 
 ### Paleta de cores
 
@@ -360,3 +383,110 @@ rofi-pass.sh
 
 Para abrir com um atalho de teclado, associe o comando `rofi-pass.sh` no
 seu compositor (sway/hyprland/mango/etc).
+
+## Encriptação por diretório com fscrypt
+
+O disco já é protegido de ponta a ponta por **LUKS2** (`/dev/nvme0n1p2`,
+mapeado como `cryptroot`, com o btrfs de `/` e `/home` por cima — veja
+`luks.sh`). O [fscrypt](https://wiki.archlinux.org/title/Fscrypt) é uma
+ferramenta separada e complementar: sim, funciona perfeitamente **dentro**
+de uma partição já em LUKS2, porque as duas camadas resolvem problemas
+diferentes.
+
+- **LUKS2** encripta o **bloco inteiro** — protege os dados quando o disco
+  está desligado/desmontado (perda/roubo do disco), mas uma vez
+  desbloqueado no boot, tudo dentro fica acessível pra qualquer processo
+  do usuário.
+- **fscrypt** encripta **por diretório**, no nível do filesystem (ext4,
+  btrfs ou F2FS — o btrfs deste sistema é suportado). Cada diretório tem
+  sua própria chave/senha ("protector"), independente da senha do LUKS, e
+  pode ficar trancado mesmo com a máquina ligada e o disco já desbloqueado
+  — útil pra pastas sensíveis (ex. cofres, documentos) que você quer
+  manter ilegíveis mesmo com a sessão aberta.
+
+Ou seja: LUKS2 protege contra "alguém roubou o disco"; fscrypt protege
+contra "alguém tem acesso à sessão/disco montado, mas não deveria ler essa
+pasta específica". Uma camada não substitui a outra.
+
+### Instalação
+
+```sh
+sudo pacman -S fscrypt
+```
+
+### Configuração inicial
+
+1. Configuração global (uma vez por máquina), cria `/etc/fscrypt.conf`:
+
+   ```sh
+   sudo fscrypt setup
+   ```
+
+2. Configuração por filesystem (uma vez por partição/subvolume onde você
+   for encriptar diretórios — aqui, a raiz `/`, já que é onde fica
+   `$HOME`):
+
+   ```sh
+   sudo fscrypt setup /
+   ```
+
+   Isso cria os metadados do fscrypt (`.fscrypt/`) na raiz do filesystem.
+   Se o filesystem for ext4, ele precisa ter a feature `encrypt` habilitada
+   (`tune2fs -O encrypt /dev/...`, geralmente só necessário em filesystems
+   antigos); btrfs já suporta nativamente.
+
+3. (Opcional, recomendado) Vincular o desbloqueio do fscrypt ao login do
+   usuário, pra não precisar digitar a senha do fscrypt toda vez que
+   fizer login:
+
+   ```sh
+   sudo fscrypt setup --all-users   # ou durante o setup por-filesystem
+   fscrypt setup /home/lucas --user=lucas
+   ```
+
+   Consulte a [wiki do Arch](https://wiki.archlinux.org/title/Fscrypt) pra
+   detalhes de PAM (`pam_fscrypt`), que desbloqueia/tranca automaticamente
+   protectores do tipo "login" no login/logout via `systemd-logind` ou
+   `pam`.
+
+### Thunar Custom Actions
+
+Duas ações foram adicionadas em `.config/Thunar/uca.xml` (symlinkado pra
+`~/.config/Thunar/uca.xml`), visíveis ao clicar com o botão direito em
+qualquer diretório no Thunar:
+
+- **`fscrypt: Encriptar diretório`** — roda
+  [`fscrypt-encrypt.sh`](.local/bin/fscrypt-encrypt.sh) num terminal
+  (`foot`), que valida se o fscrypt está instalado/configurado, confere se
+  o(s) diretório(s) selecionado(s) estão vazios (`fscrypt encrypt` exige
+  isso) e então chama `fscrypt encrypt <dir>`, pedindo interativamente pra
+  escolher/criar um protector (senha customizada, login ou chave direta).
+- **`fscrypt: Desencriptar diretório`** — roda
+  [`fscrypt-decrypt.sh`](.local/bin/fscrypt-decrypt.sh), que confere se o
+  diretório está de fato encriptado e chama `fscrypt unlock <dir>`,
+  pedindo a senha do protector num terminal.
+
+Ambos os scripts usam `notify-send` pra avisar sucesso/erro e pausam o
+terminal no final pra você ler a saída antes dele fechar.
+
+> "Desencriptar" aqui é o **unlock**: o diretório continua encriptado em
+> disco, só fica com o conteúdo acessível na sessão atual. Pra trancar de
+> novo sem esperar o logout, rode manualmente `fscrypt lock <dir>` (exige
+> que nenhum processo esteja com arquivos abertos dentro do diretório).
+
+### Uso manual (linha de comando)
+
+```sh
+# Criar e encriptar um diretório novo (precisa estar vazio)
+mkdir ~/cofre-privado
+fscrypt encrypt ~/cofre-privado
+
+# Ver status de um diretório
+fscrypt status ~/cofre-privado
+
+# Desbloquear (unlock) — torna o conteúdo legível
+fscrypt unlock ~/cofre-privado
+
+# Trancar de novo (lock) — sem precisar de reboot/logout
+fscrypt lock ~/cofre-privado
+```

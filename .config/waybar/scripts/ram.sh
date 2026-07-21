@@ -3,7 +3,7 @@
 # Módulo custom do waybar: uso de RAM no "text" e top 10 processos
 # (agrupados por nome) no tooltip.
 
-set -euo pipefail
+set -uo pipefail
 
 ICON=$''
 

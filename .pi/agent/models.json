@@ -1,11 +1,11 @@
 {
   "providers": {
     "vllm": {
-      "baseUrl": "http://localhost:8000/v1",
+      "baseUrl": "http://127.0.0.1:6379/v1",
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
-        { "id": "google/gemma-7b" }
+        { "id": "Qwen/Qwen2.5-Coder-14B-Instruct-AWQ" }
       ]
     }
   }

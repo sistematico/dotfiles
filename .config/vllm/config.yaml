@@ -1,0 +1,18 @@
+# config.yaml
+
+model: Qwen/Qwen2.5-Coder-14B-Instruct-AWQ
+#model: TheBloke/gemma-7b-AWQ
+# model: google/gemma-7b-it
+#model: google/gemma-7b
+#model: sakamakismile/Qwen3.6-27B-Text-NVFP4-MTP
+#served-model-name: qwen36-nvfp4-mtp
+#model: meta-llama/Llama-3.1-8B-Instruct
+#model: meta-llama/Llama-2-7b-hf
+host: "0.0.0.0"
+port: 6379
+uvicorn-log-level: "info"
+max-model-len: 24576
+gpu-memory-utilization: 0.92
+max-num-seqs: 1
+enable-auto-tool-choice: true
+tool-call-parser: hermes

@@ -1,2 +1,3 @@
 .config/mango/wallpaper/current
 .config/mango/wallpaper/last_index
+*.old*
