@@ -1,11 +1,13 @@
 {
   "providers": {
-    "vllm": {
-      "baseUrl": "http://127.0.0.1:6379/v1",
+    "lmstudio": {
+      "baseUrl": "http://localhost:1234/v1",
       "api": "openai-completions",
       "apiKey": "key",
       "models": [
-        { "id": "Qwen/Qwen2.5-Coder-14B-Instruct-AWQ" }
+        { "id": "gemma-4-12B-it-QAT-GGUF" },
+        { "id": "Kimi-Dev-72B-Q3_K_M.gguf" },
+        { "id": "Kimi-Dev-72B-Q3_K_S.gguf" }
       ]
     }
   }

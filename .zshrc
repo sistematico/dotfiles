@@ -103,6 +103,7 @@ alias update-unsloth='curl -fsSL https://unsloth.ai/install.sh | sh'
 alias install-webui='docker run -d -p 4000:8080 -e WEBUI_AUTH=False --gpus all --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda'
 alias script='TERM=dumb script'
 alias fd='fd -gu'
+alias lostfiles="sudo lostfiles -s | grep -v -f $HOME/.config/lostfiles.txt"
 
 #################################################
 ################### Functions ###################
@@ -245,3 +246,6 @@ export PATH=/home/lucas/.mimocode/bin:$PATH
 
 # opencode
 export PATH=/home/lucas/.opencode/bin:$PATH
+
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/home/lucas/.lmstudio/bin"

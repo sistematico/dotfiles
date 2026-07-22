@@ -326,13 +326,19 @@ do_download() {
     referer="$(get_referer "$url")"
     set_site_params "$url"
 
-    arquivo="$(nice -n $DOWNLOAD_PRIORITY ionice -c $IO_PRIORITY $YTDLP_BIN "${PARAMS[@]}" "${SITE_PARAMS[@]}" --referer "$referer" --get-filename -o "$TEMPLATE" "$url" 2>/dev/null)"
+    local filename_err
+    filename_err="$(mktemp)"
+    arquivo="$(nice -n $DOWNLOAD_PRIORITY ionice -c $IO_PRIORITY $YTDLP_BIN "${PARAMS[@]}" "${SITE_PARAMS[@]}" --referer "$referer" --get-filename -o "$TEMPLATE" "$url" 2>"$filename_err")"
 
     if [ -z "$arquivo" ]; then
-        safe_notify "Erro ao obter nome do arquivo"
-        echo "$(date '+%Y-%m-%d %H:%M:%S')|ERROR|$url" >> "$ERROR_LOG"
+        local errmsg
+        errmsg="$(tail -n 3 "$filename_err" | tr '\n' ' ')"
+        safe_notify "Erro ao obter nome do arquivo:\n$(escape_markup "$errmsg")"
+        echo "$(date '+%Y-%m-%d %H:%M:%S')|ERROR|$url|$errmsg" >> "$ERROR_LOG"
+        rm -f "$filename_err"
         return 1
     fi
+    rm -f "$filename_err"
 
     startdate=$(date '+%H:%M:%S')
     start=$(date +%s)

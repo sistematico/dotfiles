@@ -1,0 +1,5 @@
+/usr/lib/browserpass
+/etc/sysctl.d/
+/etc/pihole/
+/etc/NetworkManager/conf.d/
+/etc/containers/registries.conf.d/10-unqualified-search-registries.conf

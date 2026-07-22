@@ -27,6 +27,7 @@
     "idle_inhibitor",
     "cpu",
     "custom/ram",
+    "custom/gpu",
     // "disk",
     "temperature",
     "wireplumber#sink",
@@ -103,6 +104,13 @@
   },
   "custom/ram": {
     "exec": "~/.config/waybar/scripts/ram.sh",
+    "return-type": "json",
+    "format": "{}",
+    "interval": 5,
+    "tooltip": true
+  },
+  "custom/gpu": {
+    "exec": "~/.config/waybar/scripts/gpu.sh",
     "return-type": "json",
     "format": "{}",
     "interval": 5,

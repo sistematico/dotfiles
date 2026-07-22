@@ -123,6 +123,7 @@ menu menuitem:hover {
 #custom-notifications,
 #custom-video-down,
 #custom-applauncher,
+#custom-gpu,
 #custom-bg {
   padding: 0px 8px;
 }
@@ -233,6 +234,10 @@ menu menuitem:hover {
 
 #custom-cliphist {
   color: @blue;
+}
+
+#custom-gpu {
+  color: @cyan;
 }
 
 #custom-pass {

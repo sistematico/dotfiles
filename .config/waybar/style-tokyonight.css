@@ -131,6 +131,7 @@ menu menuitem:hover {
 #custom-video-down,
 #custom-applauncher,
 #custom-bg,
+#custom-gpu,
 #custom-theme {
   padding: 0px 8px;
 }
@@ -241,6 +242,10 @@ menu menuitem:hover {
 
 #custom-cliphist {
   color: @blue;
+}
+
+#custom-gpu {
+  color: @cyan;
 }
 
 #custom-pass {

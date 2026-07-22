@@ -54,11 +54,11 @@
 </action>
 <action>
 	<icon>changes-prevent</icon>
-	<name>fscrypt: Encriptar diretório</name>
+	<name>gocryptfs: Encriptar diretório</name>
 	<submenu></submenu>
 	<unique-id>1784223627018710-2</unique-id>
-	<command>foot -e fscrypt-encrypt.sh %F</command>
-	<description>Encripta o(s) diretório(s) selecionado(s) (precisam estar vazios) com fscrypt, pedindo a senha do protector em um terminal</description>
+	<command>gocryptfs-encrypt.sh %F</command>
+	<description>Encripta o(s) diretório(s) selecionado(s) com gocryptfs (move o conteúdo pra um cofre oculto ao lado), pedindo a senha via rofi</description>
 	<range></range>
 	<patterns>*</patterns>
 	<startup-notify/>
@@ -66,11 +66,11 @@
 </action>
 <action>
 	<icon>changes-allow</icon>
-	<name>fscrypt: Desencriptar diretório</name>
+	<name>gocryptfs: Desencriptar diretório</name>
 	<submenu></submenu>
 	<unique-id>1784223627018710-3</unique-id>
-	<command>foot -e fscrypt-decrypt.sh %F</command>
-	<description>Desbloqueia (unlock) o(s) diretório(s) encriptado(s) com fscrypt selecionado(s), pedindo a senha em um terminal</description>
+	<command>gocryptfs-decrypt.sh %F</command>
+	<description>Desbloqueia (monta) o cofre gocryptfs selecionado (ou o diretório com o mesmo nome), pedindo a senha via rofi</description>
 	<range></range>
 	<patterns>*</patterns>
 	<startup-notify/>

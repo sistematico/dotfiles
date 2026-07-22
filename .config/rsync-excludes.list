@@ -50,3 +50,6 @@ var/lib/snapd/
 var/lib/systemd/coredump/
 var/log/journal/
 usr/libexec/
+usr/bin/staprun
+usr/share/vim
+usr/share/man

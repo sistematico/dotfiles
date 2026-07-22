@@ -4,6 +4,36 @@ Meus arquivos de configuração pessoais (dotfiles) — shell, editor, SSH e
 afins — versionados em Git para facilitar backup e replicação em novas
 máquinas.
 
+## Índice
+
+- [Screenshots](#screenshots)
+- [Sistema](#sistema)
+  - [Screenshots](#screenshots-1)
+  - [Handler padrão de diretórios (inode/directory)](#handler-padrão-de-diretórios-inodedirectory)
+  - [Linger do systemd (podman rootless)](#linger-do-systemd-podman-rootless)
+- [Symlinks](#symlinks)
+- [Temas](#temas)
+  - [Arquivos recentes: `theme-switcher.sh`](#arquivos-recentes-theme-switchersh)
+  - [Parando de versionar um arquivo sem apagá-lo](#parando-de-versionar-um-arquivo-sem-apagá-lo)
+  - [Paleta de cores](#paleta-de-cores)
+- [Configurando o push duplo](#configurando-o-push-duplo)
+- [Preparando os servidores](#preparando-os-servidores)
+  - [git.paxa.dev](#gitpaxadev)
+  - [GitHub](#github)
+- [Uso diário](#uso-diário)
+- [Gerenciando senhas com `pass`](#gerenciando-senhas-com-pass)
+  - [Instalação](#instalação)
+  - [Configuração inicial](#configuração-inicial)
+  - [Uso básico](#uso-básico)
+  - [Versionando o cofre com Git](#versionando-o-cofre-com-git)
+  - [Sincronizando entre máquinas](#sincronizando-entre-máquinas)
+  - [Integração com o shell](#integração-com-o-shell)
+  - [Menu no rofi](#menu-no-rofi)
+- [Encriptação por diretório com gocryptfs](#encriptação-por-diretório-com-gocryptfs)
+  - [Instalação](#instalação-1)
+  - [Thunar Custom Actions](#thunar-custom-actions)
+  - [Uso manual (linha de comando)](#uso-manual-linha-de-comando)
+
 ## Screenshots
 
 ![Meu desktop](./.assets/desktop.png)
@@ -44,6 +74,62 @@ máquinas.
 | Rofi (`drun`) | ![Rofi](.assets/rofi-drun.png) |
 | Waybar (detalhe) | ![Waybar](.assets/waybar-closeup.png) |
 
+### Handler padrão de diretórios (inode/directory)
+
+Apps como o LM Studio ("Revelar no Explorador de Arquivos") ou qualquer
+outro que use `xdg-open`/portal pra abrir um diretório estavam abrindo o
+**Catfish** (buscador de arquivos) em vez do **Thunar**. Causa: o
+`~/.config/mimeapps.list` não tinha um default explícito para
+`inode/directory`, então o sistema caía no cache global
+(`/usr/share/applications/mimeinfo.cache`), onde `org.xfce.Catfish.desktop`
+aparece listado antes de `thunar.desktop`.
+
+Fix (já aplicado nesta máquina):
+
+```sh
+xdg-mime default thunar.desktop inode/directory
+```
+
+Isso grava a associação explícita em `[Default Applications]` no
+`~/.config/mimeapps.list`:
+
+```
+inode/directory=thunar.desktop
+```
+
+Se algum app específico continuar abrindo o Catfish mesmo depois disso, é
+sinal de que ele chama o binário `catfish` diretamente em vez de respeitar
+o default XDG — nesse caso o fix é outro (por app), não um problema de
+MIME.
+
+### Linger do systemd (podman rootless)
+
+O `podman` (rootless, `cgroupManager: systemd`) emitia esse warning ao
+rodar qualquer comando, mesmo `podman ps`:
+
+```
+WARN[0000] Failed to add pause process to systemd sandbox cgroup: Process org.freedesktop.systemd1 exited with status 1
+```
+
+Causa: sem *linger* habilitado, a instância `systemd --user` só existe
+enquanto há uma sessão de login ativa, e a delegação de cgroup pro
+processo `pause` do podman (via D-Bus, `org.freedesktop.systemd1`) fica
+instável nesse cenário.
+
+Fix (já aplicado nesta máquina):
+
+```sh
+sudo loginctl enable-linger lucas
+```
+
+Isso mantém a instância `systemd --user` do usuário ativa
+persistentemente (inclusive sem sessão gráfica aberta), o que resolve a
+delegação de cgroup de forma confiável. Confirme com:
+
+```sh
+loginctl show-user lucas | grep Linger   # Linger=yes
+```
+
 ## Symlinks
 
 Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para dentro deste repositório, e o que já está "trackeado" aqui. Mantida automaticamente pelo script `dotfile-track.sh` (Thunar Custom Action) sempre que um novo item é movido para cá.
@@ -74,8 +160,8 @@ Tabela de todos os arquivos/pastas do `$HOME` que são symlinks apontando para d
 | `~/.config/wlogout` | `~/dotfiles/.config/wlogout` |
 | `~/.local/bin/aicommit.sh` | `~/dotfiles/.local/bin/aicommit.sh` |
 | `~/.local/bin/dotfile-track.sh` | `~/dotfiles/.local/bin/dotfile-track.sh` |
-| `~/.local/bin/fscrypt-encrypt.sh` | `~/dotfiles/.local/bin/fscrypt-encrypt.sh` |
-| `~/.local/bin/fscrypt-decrypt.sh` | `~/dotfiles/.local/bin/fscrypt-decrypt.sh` |
+| `~/.local/bin/gocryptfs-encrypt.sh` | `~/dotfiles/.local/bin/gocryptfs-encrypt.sh` |
+| `~/.local/bin/gocryptfs-decrypt.sh` | `~/dotfiles/.local/bin/gocryptfs-decrypt.sh` |
 | `~/.local/bin/ram.sh` | `~/dotfiles/.local/bin/ram.sh` |
 | `~/.local/bin/rofi-pass.sh` | `~/dotfiles/.local/bin/rofi-pass.sh` |
 | `~/.local/bin/screen-recorder.sh` | `~/dotfiles/.local/bin/screen-recorder.sh` |
@@ -384,70 +470,40 @@ rofi-pass.sh
 Para abrir com um atalho de teclado, associe o comando `rofi-pass.sh` no
 seu compositor (sway/hyprland/mango/etc).
 
-## Encriptação por diretório com fscrypt
+## Encriptação por diretório com gocryptfs
 
 O disco já é protegido de ponta a ponta por **LUKS2** (`/dev/nvme0n1p2`,
 mapeado como `cryptroot`, com o btrfs de `/` e `/home` por cima — veja
-`luks.sh`). O [fscrypt](https://wiki.archlinux.org/title/Fscrypt) é uma
-ferramenta separada e complementar: sim, funciona perfeitamente **dentro**
-de uma partição já em LUKS2, porque as duas camadas resolvem problemas
-diferentes.
+`luks.sh`). A ideia original era usar o
+[fscrypt](https://wiki.archlinux.org/title/Fscrypt) — que funciona
+perfeitamente **dentro** de uma partição já em LUKS2, já que são camadas
+independentes (LUKS protege o disco em repouso; encriptação por diretório
+protege pastas específicas mesmo com o disco já desbloqueado e a sessão
+aberta) — só que:
 
-- **LUKS2** encripta o **bloco inteiro** — protege os dados quando o disco
-  está desligado/desmontado (perda/roubo do disco), mas uma vez
-  desbloqueado no boot, tudo dentro fica acessível pra qualquer processo
-  do usuário.
-- **fscrypt** encripta **por diretório**, no nível do filesystem (ext4,
-  btrfs ou F2FS — o btrfs deste sistema é suportado). Cada diretório tem
-  sua própria chave/senha ("protector"), independente da senha do LUKS, e
-  pode ficar trancado mesmo com a máquina ligada e o disco já desbloqueado
-  — útil pra pastas sensíveis (ex. cofres, documentos) que você quer
-  manter ilegíveis mesmo com a sessão aberta.
+> **fscrypt não funciona aqui**: o kernel deste sistema não suporta
+> encriptação nativa em **btrfs**, que é o filesystem de `/` e `/home`.
+> `fscrypt lock`/`encrypt` falha com `This kernel doesn't support
+> encryption on btrfs filesystems` (suporte a btrfs no fscrypt ainda não
+> foi mergeado no kernel mainline — só ext4 e F2FS funcionam de verdade
+> hoje). Confirmado testando na prática nesta máquina.
 
-Ou seja: LUKS2 protege contra "alguém roubou o disco"; fscrypt protege
-contra "alguém tem acesso à sessão/disco montado, mas não deveria ler essa
-pasta específica". Uma camada não substitui a outra.
+A alternativa usada é o [gocryptfs](https://github.com/rfjakob/gocryptfs):
+um filesystem encriptado em espaço de usuário (FUSE), então **não depende
+do kernel/filesystem por baixo** — funciona igual em btrfs, ext4, o que
+for. Cada "cofre" é um diretório oculto com dados encriptados
+(`.<nome>.gocryptfs`); pra usar o conteúdo, você monta esse cofre num
+ponto de montagem (que aqui é o próprio diretório original, com o mesmo
+nome) — quando desmontado, só existe o cofre ilegível.
 
 ### Instalação
 
 ```sh
-sudo pacman -S fscrypt
+sudo pacman -S gocryptfs
 ```
 
-### Configuração inicial
-
-1. Configuração global (uma vez por máquina), cria `/etc/fscrypt.conf`:
-
-   ```sh
-   sudo fscrypt setup
-   ```
-
-2. Configuração por filesystem (uma vez por partição/subvolume onde você
-   for encriptar diretórios — aqui, a raiz `/`, já que é onde fica
-   `$HOME`):
-
-   ```sh
-   sudo fscrypt setup /
-   ```
-
-   Isso cria os metadados do fscrypt (`.fscrypt/`) na raiz do filesystem.
-   Se o filesystem for ext4, ele precisa ter a feature `encrypt` habilitada
-   (`tune2fs -O encrypt /dev/...`, geralmente só necessário em filesystems
-   antigos); btrfs já suporta nativamente.
-
-3. (Opcional, recomendado) Vincular o desbloqueio do fscrypt ao login do
-   usuário, pra não precisar digitar a senha do fscrypt toda vez que
-   fizer login:
-
-   ```sh
-   sudo fscrypt setup --all-users   # ou durante o setup por-filesystem
-   fscrypt setup /home/lucas --user=lucas
-   ```
-
-   Consulte a [wiki do Arch](https://wiki.archlinux.org/title/Fscrypt) pra
-   detalhes de PAM (`pam_fscrypt`), que desbloqueia/tranca automaticamente
-   protectores do tipo "login" no login/logout via `systemd-logind` ou
-   `pam`.
+Não precisa de nenhum setup global nem por-filesystem (diferente do
+fscrypt) — é só rodar.
 
 ### Thunar Custom Actions
 
@@ -455,38 +511,50 @@ Duas ações foram adicionadas em `.config/Thunar/uca.xml` (symlinkado pra
 `~/.config/Thunar/uca.xml`), visíveis ao clicar com o botão direito em
 qualquer diretório no Thunar:
 
-- **`fscrypt: Encriptar diretório`** — roda
-  [`fscrypt-encrypt.sh`](.local/bin/fscrypt-encrypt.sh) num terminal
-  (`foot`), que valida se o fscrypt está instalado/configurado, confere se
-  o(s) diretório(s) selecionado(s) estão vazios (`fscrypt encrypt` exige
-  isso) e então chama `fscrypt encrypt <dir>`, pedindo interativamente pra
-  escolher/criar um protector (senha customizada, login ou chave direta).
-- **`fscrypt: Desencriptar diretório`** — roda
-  [`fscrypt-decrypt.sh`](.local/bin/fscrypt-decrypt.sh), que confere se o
-  diretório está de fato encriptado e chama `fscrypt unlock <dir>`,
-  pedindo a senha do protector num terminal.
+- **`gocryptfs: Encriptar diretório`** — roda
+  [`gocryptfs-encrypt.sh`](.local/bin/gocryptfs-encrypt.sh) no diretório
+  selecionado (ex. `~/Documentos/cofre`). Pede a nova senha duas vezes
+  (campo mascarado do **rofi**), cria um cofre oculto
+  `.cofre.gocryptfs` ao lado, monta esse cofre num ponto de montagem
+  temporário, **move todo o conteúdo** de `cofre` pra dentro dele, desmonta
+  e por fim apaga o diretório `cofre` original em texto plano. Ao final só
+  sobra `.cofre.gocryptfs` (oculto, ilegível sem a senha).
+- **`gocryptfs: Desencriptar diretório`** — roda
+  [`gocryptfs-decrypt.sh`](.local/bin/gocryptfs-decrypt.sh). Selecione o
+  cofre oculto `.cofre.gocryptfs` (ative "Mostrar arquivos ocultos" no
+  Thunar com `Ctrl+H`), pede a senha uma vez pelo rofi e monta o cofre de
+  volta em `cofre` (recriando o diretório com o conteúdo legível). Rodar
+  de novo com o cofre já montado só avisa que já está desbloqueado, não dá
+  erro.
 
-Ambos os scripts usam `notify-send` pra avisar sucesso/erro e pausam o
-terminal no final pra você ler a saída antes dele fechar.
+Nenhum dos dois abre terminal: o `gocryptfs` aceita ler a senha de um
+arquivo (`-passfile`), então os scripts salvam a senha capturada no rofi
+num arquivo temporário `chmod 600` (removido logo em seguida) em vez de
+precisar de qualquer truque de pty/terminal. Mecanismo testado
+manualmente (encriptar com subpastas, desbloquear com senha certa/errada,
+conferir que o conteúdo volta intacto) antes de considerar isso pronto.
+Ambos usam `notify-send` pra avisar sucesso/erro; em caso de falha, o
+motivo vai pro stderr, não pra notificação.
 
-> "Desencriptar" aqui é o **unlock**: o diretório continua encriptado em
-> disco, só fica com o conteúdo acessível na sessão atual. Pra trancar de
-> novo sem esperar o logout, rode manualmente `fscrypt lock <dir>` (exige
-> que nenhum processo esteja com arquivos abertos dentro do diretório).
+> Pra trancar de novo (re-esconder o conteúdo) sem esperar o logout, basta
+> desmontar manualmente: `fusermount3 -u ~/Documentos/cofre`. O diretório
+> `cofre` continua existindo (vazio) até você montá-lo de novo; os dados
+> reais seguem intactos e ilegíveis em `.cofre.gocryptfs`.
 
 ### Uso manual (linha de comando)
 
 ```sh
-# Criar e encriptar um diretório novo (precisa estar vazio)
-mkdir ~/cofre-privado
-fscrypt encrypt ~/cofre-privado
+# Criar e inicializar um cofre novo (o diretório-cofre precisa estar vazio)
+mkdir ~/.cofre-privado.gocryptfs
+gocryptfs -init ~/.cofre-privado.gocryptfs
 
-# Ver status de um diretório
-fscrypt status ~/cofre-privado
+# Montar (desbloquear) num ponto de montagem — pede a senha
+mkdir -p ~/cofre-privado
+gocryptfs ~/.cofre-privado.gocryptfs ~/cofre-privado
 
-# Desbloquear (unlock) — torna o conteúdo legível
-fscrypt unlock ~/cofre-privado
+# Usar ~/cofre-privado normalmente (arquivos de verdade, sem criptografia
+# na leitura/escrita)...
 
-# Trancar de novo (lock) — sem precisar de reboot/logout
-fscrypt lock ~/cofre-privado
+# Desmontar (trancar de novo, sem apagar nada)
+fusermount3 -u ~/cofre-privado
 ```
