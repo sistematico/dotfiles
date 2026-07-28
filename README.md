@@ -70,6 +70,23 @@ máquinas.
 
 | | |
 | --- | --- |
+| `~/.local/bin/appimage-installer.sh` | `~/dotfiles/.local/bin/appimage-installer.sh` |
+| `~/.local/bin/rofi-wallpaper.sh` | `~/dotfiles/.local/bin/rofi-wallpaper.sh` |
+| `~/.local/bin/rofi-drun` | `~/dotfiles/.local/bin/rofi-drun` |
+| `~/.local/bin/rofi-app-hider` | `~/dotfiles/.local/bin/rofi-app-hider` |
+| `~/.local/bin/rofi` | `~/dotfiles/.local/bin/rofi` |
+| `~/.local/bin/rclone.sh` | `~/dotfiles/.local/bin/rclone.sh` |
+| `~/.local/bin/gtk.sh` | `~/dotfiles/.local/bin/gtk.sh` |
+| `~/.local/bin/gocryptfs-unencrypt.sh` | `~/dotfiles/.local/bin/gocryptfs-unencrypt.sh` |
+| `~/.local/bin/gocryptfs-lock.sh` | `~/dotfiles/.local/bin/gocryptfs-lock.sh` |
+| `~/.local/bin/git-sync-check.sh` | `~/dotfiles/.local/bin/git-sync-check.sh` |
+| `~/.local/bin/clip-history.sh` | `~/dotfiles/.local/bin/clip-history.sh` |
+| `~/.config/senpai` | `~/dotfiles/.config/senpai` |
+| `~/.config/mpv` | `~/dotfiles/.config/mpv` |
+| `~/.config/user-dirs.dirs` | `~/dotfiles/.config/user-dirs.dirs` |
+| `~/.config/rsync-excludes.list` | `~/dotfiles/.config/rsync-excludes.list` |
+| `~/.config/mimeapps.list` | `~/dotfiles/.config/mimeapps.list` |
+| `~/.config/lostfiles.txt` | `~/dotfiles/.config/lostfiles.txt` |
 | Desktop (Waybar + Mango) | ![Desktop](.assets/desktop.png) |
 | Rofi (`drun`) | ![Rofi](.assets/rofi-drun.png) |
 | Waybar (detalhe) | ![Waybar](.assets/waybar-closeup.png) |
