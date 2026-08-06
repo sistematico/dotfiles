@@ -1,0 +1,292 @@
+#!/usr/bin/env bash
+# Esconde/mostra aplicativos do menu (rofi drun / Gnome / outros DEs).
+#
+# Dois modos de "hide":
+#   - "so no rofi": cria um override em ~/.local/share/rofi-app-hider/applications
+#     (um diretorio FORA do XDG_DATA_DIRS padrao). So o wrapper `rofi-drun`
+#     inclui esse diretorio na busca, entao Gnome/outros DEs nunca o veem.
+#   - "em todo lugar": cria/edita a copia em ~/.local/share/applications com
+#     Hidden=true, que e o diretorio padrao do XDG (tem prioridade sobre
+#     /usr/share/applications para qualquer app compativel com o spec).
+set -euo pipefail
+
+LOCAL_APPS="$HOME/.local/share/applications"
+HIDER_DIR="$HOME/.local/share/rofi-app-hider"
+ROFI_ONLY_DIR="$HIDER_DIR/applications"
+SYS_DIRS=(/usr/share/applications /usr/local/share/applications)
+
+mkdir -p "$LOCAL_APPS" "$ROFI_ONLY_DIR"
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send "Rofi App Hider" "$1"
+    else
+        echo "$1" >&2
+    fi
+}
+
+get_name() {
+    # imprime o primeiro Name= dentro de [Desktop Entry]
+    awk -F'=' '
+        /^\[/ { insec = ($0 == "[Desktop Entry]") }
+        insec && $1 == "Name" && !found {
+            sub(/^Name=/, "")
+            print
+            found = 1
+        }
+    ' "$1"
+}
+
+get_icon() {
+    # imprime o primeiro Icon= dentro de [Desktop Entry]
+    awk -F'=' '
+        /^\[/ { insec = ($0 == "[Desktop Entry]") }
+        insec && $1 == "Icon" && !found {
+            sub(/^Icon=/, "")
+            print
+            found = 1
+        }
+    ' "$1"
+}
+
+get_exec() {
+    # imprime o Exec= sem os codigos de campo (%f, %U, etc.)
+    awk -F'=' '
+        /^\[/ { insec = ($0 == "[Desktop Entry]") }
+        insec && $1 == "Exec" && !found {
+            sub(/^Exec=/, "")
+            print
+            found = 1
+        }
+    ' "$1" | sed -E 's/%[fFuUdDnNickvm%]//g; s/  +/ /g; s/^ +| +$//g'
+}
+
+set_key() {
+    # Seta $key=$value dentro do grupo [Desktop Entry], nunca em outro
+    # grupo (ex: [Desktop Action new-window], comum em apps do GNOME).
+    # Um append cego no fim do arquivo cai no ULTIMO grupo do arquivo,
+    # nao necessariamente [Desktop Entry] - foi um bug real que fazia o
+    # Hidden=true ser ignorado nesses apps.
+    local file="$1" key="$2" value="$3"
+    local tmp
+    tmp=$(mktemp "${file}.XXXXXX")
+    awk -v key="$key" -v value="$value" '
+        function flush_pending() {
+            if (in_entry && !done) {
+                print key "=" value
+                done = 1
+            }
+        }
+        /^\[/ {
+            flush_pending()
+            in_entry = ($0 == "[Desktop Entry]")
+            print
+            next
+        }
+        in_entry && $0 ~ ("^" key "=") {
+            if (!done) {
+                print key "=" value
+                done = 1
+            }
+            next
+        }
+        { print }
+        END { flush_pending() }
+    ' "$file" > "$tmp" && mv "$tmp" "$file"
+}
+
+find_source_desktop_file() {
+    # resolve o arquivo .desktop "real" para um basename, respeitando
+    # a mesma ordem de precedencia do XDG (local > sistema)
+    local base="$1"
+    if [ -f "$LOCAL_APPS/$base" ]; then
+        echo "$LOCAL_APPS/$base"
+        return
+    fi
+    local d
+    for d in "${SYS_DIRS[@]}"; do
+        if [ -f "$d/$base" ]; then
+            echo "$d/$base"
+            return
+        fi
+    done
+}
+
+list_visible_apps() {
+    # base -> nome/icone/exec, dedupe respeitando prioridade local > sistema
+    local -A seen=()
+    local d f base name icon exec_clean
+    for d in "$LOCAL_APPS" "${SYS_DIRS[@]}"; do
+        [ -d "$d" ] || continue
+        for f in "$d"/*.desktop; do
+            [ -e "$f" ] || continue
+            base=$(basename "$f")
+            [ -n "${seen[$base]:-}" ] && continue
+            seen[$base]=1
+            grep -q '^NoDisplay=true' "$f" 2>/dev/null && continue
+            grep -q '^Hidden=true' "$f" 2>/dev/null && continue
+            [ -f "$ROFI_ONLY_DIR/$base" ] && grep -q '^Hidden=true' "$ROFI_ONLY_DIR/$base" 2>/dev/null && continue
+            name=$(get_name "$f")
+            [ -z "$name" ] && continue
+            icon=$(get_icon "$f")
+            exec_clean=$(get_exec "$f")
+            printf '%s\t%s\t%s\t%s\n' "$name" "$base" "$icon" "$exec_clean"
+        done
+    done
+}
+
+list_hidden_apps() {
+    local f base name
+    for f in "$LOCAL_APPS"/*.desktop; do
+        [ -e "$f" ] || continue
+        grep -q '^Hidden=true' "$f" 2>/dev/null || continue
+        base=$(basename "$f")
+        name=$(get_name "$f")
+        printf '%s (todo lugar)\t%s\teverywhere\n' "$name" "$base"
+    done
+    for f in "$ROFI_ONLY_DIR"/*.desktop; do
+        [ -e "$f" ] || continue
+        grep -q '^Hidden=true' "$f" 2>/dev/null || continue
+        base=$(basename "$f")
+        name=$(get_name "$f")
+        printf '%s (so rofi)\t%s\trofi\n' "$name" "$base"
+    done
+}
+
+ensure_local_copy() {
+    # garante uma copia de $base em $dest_dir, criando-a a partir do
+    # arquivo original caso ainda nao exista, e imprime o caminho final
+    local base="$1" dest_dir="$2"
+    local dest="$dest_dir/$base"
+    if [ ! -f "$dest" ]; then
+        local src
+        src=$(find_source_desktop_file "$base")
+        if [ -z "$src" ]; then
+            notify "Arquivo .desktop nao encontrado: $base"
+            exit 1
+        fi
+        cp "$src" "$dest"
+    fi
+    echo "$dest"
+}
+
+hide_everywhere() {
+    local base="$1" dest
+    dest=$(ensure_local_copy "$base" "$LOCAL_APPS")
+    set_key "$dest" "Hidden" "true"
+    notify "Escondido em todo lugar (rofi + Gnome/etc): $base"
+}
+
+hide_rofi_only() {
+    # Se o .desktop real ja mora em $LOCAL_APPS, esse diretorio sempre
+    # tem prioridade sobre qualquer entrada de XDG_DATA_DIRS (inclusive
+    # o ROFI_ONLY_DIR injetado pelo wrapper `rofi`), entao um override
+    # "so no rofi" nunca seria visto primeiro - Hidden=true no ROFI_ONLY_DIR
+    # ficaria sem efeito e o app continuaria aparecendo. Nesse caso o
+    # unico jeito de esconder e no arquivo real mesmo (= hide_everywhere).
+    local base="$1" dest
+    if [ -f "$LOCAL_APPS/$base" ]; then
+        set_key "$LOCAL_APPS/$base" "Hidden" "true"
+        notify "Esse app ja tem .desktop local; 'so no rofi' nao teria efeito. Escondido em todo lugar: $base"
+        return
+    fi
+    dest=$(ensure_local_copy "$base" "$ROFI_ONLY_DIR")
+    set_key "$dest" "Hidden" "true"
+    notify "Escondido apenas no rofi: $base"
+}
+
+unhide_file() {
+    local file="$1"
+    sed -i '/^Hidden=true/d' "$file"
+}
+
+pick() {
+    # $1 = prompt; le opcoes da stdin, uma por linha
+    # "|| true" evita que o ESC (rofi sai com codigo != 0) derrube o
+    # script inteiro por causa do set -e
+    rofi -dmenu -i -p "$1" || true
+}
+
+hide_flow() {
+    local entries=() name base icon exec_clean display
+    local -A name_to_base=()
+    local -A display_to_icon=()
+    while IFS=$'\t' read -r name base icon exec_clean; do
+        [ -z "$name" ] && continue
+        display="$name"
+        [ -n "$exec_clean" ] && display="$display ($exec_clean)"
+        name_to_base["$display"]="$base"
+        [ -n "$icon" ] && display_to_icon["$display"]="$icon"
+        entries+=("$display")
+    done < <(list_visible_apps | sort)
+
+    if [ "${#entries[@]}" -eq 0 ]; then
+        notify "Nenhum aplicativo encontrado."
+        return
+    fi
+
+    local sel
+    sel=$( { for display in "${entries[@]}"; do
+                 icon="${display_to_icon[$display]:-}"
+                 if [ -n "$icon" ]; then
+                     printf '%s\0icon\x1f%s\n' "$display" "$icon"
+                 else
+                     printf '%s\n' "$display"
+                 fi
+             done
+           } | rofi -dmenu -i -show-icons -p "Esconder qual app?" || true )
+    [ -z "$sel" ] && return
+    base="${name_to_base[$sel]:-}"
+    [ -z "$base" ] && return
+
+    local mode
+    mode=$(printf 'So no rofi\nEm todo lugar (rofi + Gnome/etc)\n' | pick "Tipo de hide: $sel")
+    case "$mode" in
+        "So no rofi") hide_rofi_only "$base" ;;
+        "Em todo lugar (rofi + Gnome/etc)") hide_everywhere "$base" ;;
+        *) return ;;
+    esac
+}
+
+unhide_flow() {
+    local entries=() disp base scope line
+    local -A disp_to_line=()
+    while IFS=$'\t' read -r disp base scope; do
+        [ -z "$disp" ] && continue
+        disp_to_line["$disp"]="$base"$'\t'"$scope"
+        entries+=("$disp")
+    done < <(list_hidden_apps | sort)
+
+    if [ "${#entries[@]}" -eq 0 ]; then
+        notify "Nenhum aplicativo escondido."
+        return
+    fi
+
+    local sel
+    sel=$(printf '%s\n' "${entries[@]}" | pick "Desfazer hide de:")
+    [ -z "$sel" ] && return
+    line="${disp_to_line[$sel]:-}"
+    [ -z "$line" ] && return
+    IFS=$'\t' read -r base scope <<< "$line"
+
+    if [ "$scope" = "everywhere" ]; then
+        unhide_file "$LOCAL_APPS/$base"
+    else
+        unhide_file "$ROFI_ONLY_DIR/$base"
+    fi
+    notify "Restaurado: $base"
+}
+
+main_menu() {
+    local choice
+    while true; do
+        choice=$(printf 'Esconder aplicativo\nMostrar aplicativo (desfazer)\n' | pick "App Hider")
+        case "$choice" in
+            "Esconder aplicativo") hide_flow ;;
+            "Mostrar aplicativo (desfazer)") unhide_flow ;;
+            *) break ;;
+        esac
+    done
+}
+
+main_menu

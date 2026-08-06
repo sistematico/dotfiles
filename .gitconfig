@@ -1,0 +1,65 @@
+[init]
+	templateDir = /home/lucas/.git-templates
+	defaultBranch = main
+
+[user]
+	name = Lucas Saliés Brum
+	email = sistematico@gmail.com
+
+[url "git://git.archlinux.org/svntogit/packages.git --single-branch --branch packages/"]
+	insteadOf = "pkg:"
+
+[url "ssh://aur@aur.archlinux.org/"]
+	insteadOf = "aur:"
+
+[url "git@github.com:sistematico/"]
+	insteadOf = "gh:"
+
+[url "git@github.com:somdomato/"]
+	insteadOf = "sdm:"
+
+[url "git@gitlab.com:sistematico/"]
+	insteadOf = "gl:"
+
+[url "git@bitbucket.org:sistematico/"]
+	insteadOf = "bb:"
+
+[url "git@codeberg.org:sistematico/"]
+	insteadOf = "cb:"
+
+[url "git://git.suckless.org/"]
+	insteadOf = "sl:"
+
+[alias]
+	cl = clone
+	ch = checkout
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	lg = log --oneline
+  mr = merge
+  ca = "!(git commit -m \"$(git diff --cached | gemini -p 'Based on the following diff, write a commit message in the Conventional Commits format. The output should be only the commit message, without any additional text.')\" && git log --stat -1)"
+
+[pull]
+	rebase = true
+
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+
+[core]
+	editor = code --wait
+	autocrlf = false
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[format]
+	from = true
+
+[advice]
+	mergeConflict = false

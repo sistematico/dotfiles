@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Atalho de conveniencia para `rofi -show drun`. A logica de filtragem dos
+# apps "so-no-rofi" agora vive no shadow ~/.local/bin/rofi, entao este
+# script so precisa chamar `rofi` normalmente (qualquer flag extra passada
+# aqui e repassada do mesmo jeito).
+set -euo pipefail
+exec rofi -show drun "$@"

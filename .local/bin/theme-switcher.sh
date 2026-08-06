@@ -316,7 +316,7 @@ menu() {
       else
         printf '  %s\n' "$(display_name "$t")"
       fi
-    done | rofi -dmenu -p "Tema" -theme-str 'window { width: 8%; } element { padding: 8px 0; }  mainbox { children: [listview]; }'  -l "${#THEME_IDS[@]}" -no-custom
+    done | rofi -dmenu -p "Tema" -theme-str 'window { width: 10%; } element { padding: 8px 0; }  mainbox { children: [listview]; }'  -l "${#THEME_IDS[@]}" -no-custom
   ) || exit 0
 
   [ -n "$choice" ] || exit 0

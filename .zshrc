@@ -237,15 +237,17 @@ PROMPT='%F{cyan}%n%f in %F{yellow}%~%f${vcs_info_msg_0_}$(git_stash_count)$(git_
 # bun completions
 [ -s "/home/lucas/.bun/_bun" ] && source "/home/lucas/.bun/_bun"
 
+# Command Not Found
 source /usr/share/doc/pkgfile/command-not-found.zsh
-# kimi-code
-export PATH="/home/lucas/.kimi-code/bin:$PATH"
+
+# kimicode
+export PATH=$HOME/.kimi-code/bin:$PATH
 
 # mimocode
-export PATH=/home/lucas/.mimocode/bin:$PATH
+export PATH=$HOME/.mimocode/bin:$PATH
 
 # opencode
-export PATH=/home/lucas/.opencode/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
 
 # Added by LM Studio CLI tool (lms)
-export PATH="$PATH:/home/lucas/.lmstudio/bin"
+export PATH=$HOME/.lmstudio/bin:$PATH
